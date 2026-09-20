@@ -105,10 +105,12 @@ time when it can; otherwise at runtime.
 | Dyalog | `X\Y`, `X⍀Y` |
 | Haply | `(⍀ X Y)`, `(⍀_ X Y)` |
 | Phase | 6 |
-| Status | later |
+| Status | implement |
 
 **Intent.** Insert fill along the axis where `X` is 0. Fill is the backend
-zero (decision 33), not an APL prototype.
+zero (decision 33), not an APL prototype. `X` is a rank-0/1 boolean or
+0/1 integer mask. The number of 1s must equal the length of `Y` along
+the axis. Values other than 0 or 1 are a `ValueError`.
 
 ---
 
@@ -303,7 +305,7 @@ Dyalog `(f g h)` on `Y` is `(f Y) g (h Y)`; on `X Y` is `(X f Y) g (X h Y)`.
 ```
 
 **Intent.** Same as Dyalog 3-trains on functions. Phase 5 is the 3-train
-only. Longer forks `(fork a b c d e)` wait; they are not item 48.
+only. Longer forks `(fork a b c d e)` are item 62, not item 48.
 
 `f` and `h` may be arrays (Dyalog constant forks). Working default: allow
 array wings.

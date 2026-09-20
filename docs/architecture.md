@@ -200,7 +200,7 @@ Composition macros and the named 3-train. Item 48 is **not** this phase.
 
 | Ship | Leave |
 | --- | --- |
-| `(fork f g h …)` — 3-train only | longer forks |
+| `(fork f g h …)` — 3-train only | longer forks — item 62 |
 | `∘` beside (two functions, then bind) | |
 | `⍤` atop (function operand) | `⍤` rank (array operand) — item 48 |
 | `⍥` over | `⍣` `⌸` `⌺` At — item 48 |
@@ -218,7 +218,7 @@ Finish the PyTorch surface before the NumPy sweep.
   zero (decision 33).
 
 Done when `(⍀ mask Y)` inserts fill along axis 0 and `(⍀_ mask Y)`
-does the same on the last axis.
+does the same on the last axis. **Met** for PyTorch.
 
 ### Phase 7 — NumPy backend
 
@@ -252,6 +252,7 @@ decision-gated, not a phase:
 - Comparison tolerance (29), constructor backend (30), fill/zilde (33)
 - General axis (34), circular-table extent (47)
 - Aliases, oracles, package-layout close (39, 54, 55)
+- Longer forks (62)
 
 ## Per-glyph implementation recipe
 

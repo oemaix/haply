@@ -43,12 +43,26 @@ positive.
 
 ## Scan — `⍀` / `⍀_`
 
-Cumulative `+` `×` `⌈` `⌊` along the axis. An array operand (expand) is
-not shipped.
+Cumulative `+` `×` `⌈` `⌊` along the axis.
 
 ```hy
 (⍀ + (torch.tensor [1 2 3 4]))   ; [1 3 6 10]
 ```
+
+## Expand — array operand on `⍀` / `⍀_`
+
+A boolean or 0/1 integer mask inserts backend-zero fill where the mask
+is 0. The number of 1s must match the length of `Y` along the axis.
+
+```hy
+(⍀ (torch.tensor [1 0 1]) (torch.tensor [7 8]))
+; [7 0 8]
+(⍀_ (torch.tensor [1 0 1]) (torch.tensor [[1 2] [3 4]]))
+; [[1 0 2]
+;  [3 0 4]]
+```
+
+Negative values and integers other than 0 or 1 are a `ValueError`.
 
 ## Commute — `⍨`
 

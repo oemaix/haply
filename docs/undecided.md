@@ -368,9 +368,10 @@ Names for atop, beside, behind, over, and fork are already closed
 operators ship.
 
 **Working default.** Composition glyphs and `fork` are Phase 5, not this
-item. Expand (array `⍀`) is Phase 6. Key, Stencil, Rank-as-array, Power,
-and At are Phase 8 — do not start that phase until this item closes or
-an explicit pull-forward names which of them ship.
+item. Longer forks are item 62. Expand (array `⍀`) is Phase 6. Key,
+Stencil, Rank-as-array, Power, and At are Phase 8 — do not start that
+phase until this item closes or an explicit pull-forward names which of
+them ship.
 
 **Impact.** Roadmap in [architecture.md](architecture.md).
 
@@ -457,3 +458,29 @@ that as an identifier (`∘` then `.` is attribute syntax). What do we
 decision-39 sense: it is the only Hy-legal spelling of G065.
 
 **Impact.** `haply.macros`, G065, user manual.
+
+---
+
+## 62. Longer forks
+
+**Question.** Phase 5 ships the 3-train only: `(fork f g h Y)` and
+`(fork f g h X Y)`. Dyalog also has longer odd-length trains
+(`(a b c d e)` is `a b (c d e)`). Does Haply ever accept
+`(fork a b c d e …)`?
+
+This is not item 48. Rank, Power, Key, Stencil, and At stay there.
+Decision 13 already forbids a second named train; even length would be
+atop (`⍤`), not a 2-train `fork`.
+
+**Options.**
+
+- A. Never. The 3-train is the whole product.
+- B. Odd length, nested like Dyalog: `(fork a b c d e Y)` is
+  `(fork a b (fork c d e) Y)`.
+- C. Later, but not in v1. Keep the Phase 5 `TypeError` until a
+  decision pulls B forward.
+
+**Working default.** C. No phase number until this item closes or an
+explicit pull-forward names one.
+
+**Impact.** `haply/trains.hy`, G077, [operators.md](operators.md).

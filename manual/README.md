@@ -11,11 +11,11 @@ Prose here is English.
 
 ## Status
 
-Phases 0–5 are available on `torch.Tensor`. NumPy and a Python-first
+Phases 0–6 are available on `torch.Tensor`. NumPy and a Python-first
 import surface are not shipped. Operators are macros:
 `(require haply.macros [⌿ · outer ∘ …])`. Fork is
-`(require haply.trains [fork])`. Expand is Phase 6. NumPy is Phase 7.
-Power, key, stencil, rank, and At are Phase 8.
+`(require haply.trains [fork])`. NumPy is Phase 7. Power, key, stencil,
+rank, and At are Phase 8.
 
 ## What Haply is
 
@@ -121,14 +121,13 @@ These Dyalog characters are **not** Haply names.
 | [scalars.md](scalars.md) | Arithmetic, compare, logic, circular, factorial |
 | [structure.md](structure.md) | Shape, ravel, reverse, take/drop, match, tally |
 | [search.md](search.md) | Iota, where, membership, unique, grade, find, index |
-| [operators.md](operators.md) | Reduce, scan, commute, products, each, jot, fork |
+| [operators.md](operators.md) | Reduce, scan, expand, commute, products, each, jot, fork |
 | [numeric.md](numeric.md) | Roll/deal, matrix inverse/divide, encode/decode |
 | [recipes.md](recipes.md) | Short programs that run today |
 | [ai.md](ai.md) | Compact sheet for assistants |
 
 ## Not in this manual yet
 
-- Expand (`⍀` with an array operand) — Phase 6
 - NumPy backend — Phase 7
 - Power, key, stencil, rank, At — Phase 8
 - English aliases (glyphs are the names)

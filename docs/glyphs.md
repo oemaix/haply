@@ -203,8 +203,8 @@ glyphs plus `_` (decisions 15, 20, 60).
 | --- | --- | --- | --- | --- | --- | --- |
 | G054 | `/` | `⌿_` | Replicate last | Repeat/select along the last axis by integer mask `X`. | 3 | implement |
 | G055 | `⌿` | `⌿` | Replicate first | Same on axis 0. | 3 | implement |
-| G056 | `\` | `⍀_` | Expand last | Insert zeros/fill along the last axis by boolean/int mask. | 6 | later |
-| G057 | `⍀` | `⍀` | Expand first | Same on axis 0. | 6 | later |
+| G056 | `\` | `⍀_` | Expand last | Insert zeros/fill along the last axis by boolean/int mask. | 6 | implement |
+| G057 | `⍀` | `⍀` | Expand first | Same on axis 0. | 6 | implement |
 
 When the left operand is a *function* rather than an array, the same
 glyphs are operators (reduce/scan). See decision 60 and
@@ -247,7 +247,7 @@ and over are the glyphs in section 9. There is no `(hook …)`.
 
 | Id | Concept | Haply | Phase | Status |
 | --- | --- | --- | --- | --- |
-| G077 | Fork | `(fork f g h …)` | 5 | implement |
+| G077 | Fork | `(fork f g h …)` | 5 | implement (3-train); longer later (62) |
 | G078 | Atop | `⍤` (see G067) | 5 | implement |
 | G079 | Hook | — (covered by `⍤` `∘` `⍛` `⍥`) | — | drop |
 

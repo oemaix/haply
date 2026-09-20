@@ -457,7 +457,7 @@ array, and reduce or scan when the operand is a function:
 (⌿ + A)       ; reduce + along axis 0
 (⌿_ mask A)   ; replicate last
 (⌿_ + A)      ; reduce last
-(⍀ mask A)    ; expand first (when that glyph ships)
+(⍀ mask A)    ; expand first
 (⍀ + A)       ; scan first
 ```
 

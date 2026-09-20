@@ -67,9 +67,28 @@
   (setv m (torch.tensor [[1 2 3] [4 5 6]]))
   (assert (torch.equal (⍀_ + m) (torch.tensor [[1 3 6] [4 9 15]]))))
 
-(defn test-scan-array-operand-later []
-  (with [(pytest.raises TypeError)]
+(defn test-expand-first []
+  (assert (torch.equal (⍀ (T 1 0 1) (T 7 8)) (T 7 0 8))))
+
+(defn test-expand-bool []
+  (assert (torch.equal (⍀ (torch.tensor [True False True]) (T 7 8))
+                       (T 7 0 8))))
+
+(defn test-expand-last []
+  (setv m (torch.tensor [[1 2] [3 4]]))
+  (assert (torch.equal (⍀_ (T 1 0 1) m) (torch.tensor [[1 0 2] [3 0 4]]))))
+
+(defn test-expand-matrix-first []
+  (setv m (torch.tensor [[1 2] [3 4]]))
+  (assert (torch.equal (⍀ (T 1 0 1) m) (torch.tensor [[1 2] [0 0] [3 4]]))))
+
+(defn test-expand-length-error []
+  (with [(pytest.raises ValueError)]
     (⍀ (T 1 0 1) (T 1 2 3))))
+
+(defn test-expand-negative-error []
+  (with [(pytest.raises ValueError)]
+    (⍀ (T 1 -1) (T 3))))
 
 ;; --- commute --------------------------------------------------------------
 

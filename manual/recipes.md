@@ -6,7 +6,7 @@ Programs that run on today’s public API.
 (import torch)
 (import haply [⍴ × ÷ ⌽ ++ ⍪ ↑ ⊖ ≢ ⍳ ⊤ ⊥ ⊣ ⊢])
 (import haply.scalar :as sc)
-(require haply.macros [⌿ · ∘])
+(require haply.macros [⌿ · ∘ ⍀])
 (require haply.trains [fork])
 ```
 
@@ -96,4 +96,11 @@ Dyalog sketches `+⌿ A × B` and `A +.× B`:
 (fork ⊣ + ⊢ X Y)       ; [11 22 33]
 (∘ × + (torch.tensor [-2 0 4]))
 ; [-1 0 1]
+```
+
+## Expand a gap
+
+```hy
+(⍀ (torch.tensor [1 0 1]) (torch.tensor [7 8]))
+; [7 0 8]
 ```

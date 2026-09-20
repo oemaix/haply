@@ -107,10 +107,38 @@
     (reduce-cells axis op y)
     (replicate axis op y)))
 
+(defn expand-along [axis x y]
+  "Insert backend-zero fill along `axis`. 0/False inserts; 1/True takes the next item."
+  (setv y (require-torch "⍀" y)
+        x (if (is-torch x) x (torch.as-tensor x :device y.device)))
+  (when (= y.ndim 0)
+    (raise (ValueError "⍀ expand needs rank ≥ 1")))
+  (when (> x.ndim 1)
+    (raise (ValueError "⍀ expand X must have rank 0 or 1")))
+  (when (or (.is-floating-point x) (.is-complex x))
+    (raise (ValueError "⍀ expand X must be boolean or integer")))
+  (setv x (if (= x.ndim 0) (torch.reshape x [1]) x)
+        ax (if (< axis 0) (+ y.ndim axis) axis)
+        n (get y.shape ax))
+  (when (and (!= x.dtype torch.bool) (torch.any (torch.lt x 0)))
+    (raise (ValueError "⍀ expand X must be non-negative")))
+  (when (and (!= x.dtype torch.bool) (torch.any (torch.gt x 1)))
+    (raise (ValueError "⍀ expand X must be 0 or 1")))
+  (setv ones (if (= x.dtype torch.bool)
+               (int (torch.sum x))
+               (int (torch.sum (torch.ne x 0)))))
+  (when (!= ones n)
+    (raise (ValueError "⍀ expand number of 1s must match the axis")))
+  (setv shp (list y.shape))
+  (setv (get shp ax) (int (.numel x)))
+  (setv out (torch.zeros shp :dtype y.dtype :device y.device)
+        dest (.reshape (torch.nonzero x) [-1]))
+  (torch.index-copy out ax dest y))
+
 (defn scan-or-expand [axis op y]
   (if (callable op)
     (scan-cells axis op y)
-    (raise (TypeError "⍀ expand (array operand) is not in Phase 3"))))
+    (expand-along axis op y)))
 
 (defn nwise-reduce [axis n f y]
   "Positive n-wise reduce. Unknown `f` folds each window."

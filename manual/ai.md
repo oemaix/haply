@@ -69,6 +69,7 @@ atop only; an integer right operand is a `TypeError`.
 - Do treat `⍳` not-found as `n`. Do treat `⍋` as numeric only.
 - Do treat `(⌹ X Y)` as solve `Y B = X`. Do treat `?` bounds as `[0, n)`.
 - Do `require` operators and `fork`; kernel expansions need `torch` in the file.
+- Do treat `(⍀ mask Y)` as expand (0/1 or boolean; fill is zero).
 - Do treat Haply `⍛` as `(f (g Y))` / `((g X) f Y)`, not Dyalog behind.
 - Do not import NumPy through Haply.
 

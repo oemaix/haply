@@ -39,5 +39,5 @@ They are not decisions.
 
 ## Status
 
-Phases 0–5 are implemented for PyTorch. Continue with Phase 6 (expand)
+Phases 0–6 are implemented for PyTorch. Continue with Phase 7 (NumPy)
 in [architecture.md](architecture.md).
