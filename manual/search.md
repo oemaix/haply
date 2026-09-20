@@ -4,7 +4,7 @@ Index origin is 0. Results stay `torch.Tensor` except where a row says
 otherwise.
 
 ```hy
-(import haply [⍳ ⍸ ∊ ⌷ ⊃ ∪ ∩ ⍋ ⍒ ≁])
+(import haply [⍳ ⍸ ∊ ⌷ ⊃ ∪ ∩ ⍋ ⍒ ≁ ⍷])
 ```
 
 ## Iota and where
@@ -47,6 +47,21 @@ Complex input is a `ValueError`.
 (∩ (torch.tensor [1 2 3 2]) (torch.tensor [2 4])) ; [2 2]
 (⍋ (torch.tensor [30 10 20]))                     ; [1 2 0]
 (≁ (torch.tensor [1 2 3 2]) (torch.tensor [2 4])) ; [1 3]
+```
+
+## Find
+
+| Glyph | Dyad |
+| --- | --- |
+| `⍷` | boolean mask, same shape as `Y`, `True` where `X` begins as a sub-array |
+
+If rank(`X`) is smaller than rank(`Y`), `X` is left-padded with 1s. If
+rank(`X`) is larger, the mask is all `False`. Overlaps are reported at
+every start index.
+
+```hy
+(⍷ (torch.tensor [1 2]) (torch.tensor [0 1 2 1 2 9]))
+; [False True False True False False]
 ```
 
 ## Index and first

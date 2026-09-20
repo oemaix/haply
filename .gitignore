@@ -4,6 +4,9 @@
 /tmp
 /result
 /.pytest_cache
+/dist
+/build
+*.egg-info
 __pycache__/
 *.py[cod]
 

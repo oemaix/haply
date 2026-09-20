@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "haply"
+version = "0.1.0"
+description = "Hy library of Dyalog-inspired APL glyphs for PyTorch tensors"
+readme = "README.md"
+license = "Apache-2.0"
+license-files = ["LICENSE"]
+requires-python = ">=3.13"
+authors = [{ name = "Haply contributors" }]
+dependencies = [
+    "hy==1.2.0",
+    "torch",
+]
+
+[project.urls]
+Homepage = "https://github.com/oemaix/haply"
+Documentation = "https://github.com/oemaix/haply/blob/main/manual/README.md"
+
+[tool.setuptools.packages.find]
+include = ["haply"]
+
+[tool.setuptools.package-data]
+haply = ["*.hy"]

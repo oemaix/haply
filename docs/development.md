@@ -41,7 +41,10 @@ nix develop
 hy -m pytest tests
 ```
 
-Do not require a global `pip install` as the official path.
+`pyproject.toml` is install metadata (decision 52) so other projects can
+depend on a local path or a Git pin. It is not the version pin;
+`flake.lock` is. Do not require a global `pip install` as the official
+path.
 
 ## Layout
 

@@ -75,7 +75,7 @@ Elementwise. Broadcasting is the backend’s. No APL conformability.
 | G009 | `⌈` | `⌈` | Ceiling | Maximum | Ceiling; elementwise max. Variadic fold (decision 37). | 1 | implement |
 | G010 | `○` | `○` | π times | Circular | Monadic: `π * Y`. Dyadic: circular table (extent still decision 47). Complex-valued inputs are in scope (decision 31). | 2 | adapt |
 | G011 | `!` | `!` | Factorial | Binomial | `gamma(Y+1)`; binomial via gammaln or an integer path. | 2 | implement |
-| G012 | `?` | `?` | Roll | Deal | Monadic: random integers in `[0, n)` (decision 28). Dyadic: sample without replacement. Backend RNG is the host RNG. | 4 | adapt |
+| G012 | `?` | `?` | Roll | Deal | Monadic: random integers in `[0, n)` per element (decision 28). Bound ≤ 0 is an error — no Dyalog `?0` float-in-(0,1). Dyadic: `k` distinct draws from `[0, n)`. Host RNG is `torch`. | 4 | adapt |
 
 ### Circular left arguments (G010), working subset
 
@@ -160,7 +160,7 @@ Index origin is 0 (decision 28). Translate Dyalog examples accordingly.
 | G036 | `⍳` | `⍳` | Index generator | Index of | Monadic: `arange` / `meshgrid` for a shape vector. Dyadic: first index of each `Y` in `X` along the search axis; not-found sentinel is `-1` or `n` (working default: `n`, length of the search vector — closer to Dyalog’s `⎕IO+≢X` after origin 0). | 3 | adapt |
 | G037 | `⍸` | `⍸` | Where | Interval index | Monadic: indices of truthy values (`nonzero`). Dyadic: `torch.bucketize` of `Y` into sorted `X` (left / insertion index, 0-based). | 3 | implement |
 | G038 | `∊` | `∊` | Enlist | Membership | **Monadic enlist** becomes flatten (same as `++` on a simple tensor) or is dropped as redundant. Dyadic: `isin`. | 3 | adapt |
-| G039 | `⍷` | `⍷` | — | Find | Boolean mask of occurrences of array `X` as a sub-array of `Y`. | 4 | later |
+| G039 | `⍷` | `⍷` | — | Find | Boolean mask of occurrences of array `X` as a sub-array of `Y`. Same shape as `Y`. Rank(`X`) < rank(`Y`) left-pads `X` with 1s; rank(`X`) > rank(`Y`) finds nothing. | 4 | implement |
 | G040 | `∪` | `∪` | Unique | Union | Monadic: unique values in ravel order of first occurrence. Dyadic union waits on how “set” we want tensors to be (working: unique of catenated ravels). | 3 | adapt |
 | G041 | `∩` | `∩` | — | Intersection | Values of `X` that appear in `Y`, stable order from `X`. | 3 | implement |
 | G042 | `⍋` | `⍋` | Grade up | Dyadic grade up | Indices that sort `Y` ascending. Numeric only (decision 32); no collation alphabet. | 3 | adapt |
@@ -173,9 +173,9 @@ Index origin is 0 (decision 28). Translate Dyalog examples accordingly.
 
 | Id | Dyalog | Haply | Monadic Dyalog | Dyadic Dyalog | Haply intent | Phase | Status |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| G045 | `⌹` | `⌹` | Matrix inverse | Matrix divide | `inv` / `pinv` as documented; dyadic is solve (`X⌹Y` as “Y into X” in Dyalog — **state the Haply argument order explicitly in the implementation docstring**: working intent is `lstsq/solve` for `Y` against `X`, matching Dyalog `X⌹Y` ≈ `Y X⁻¹` for matrices). Confirm with tests before freezing. | 4 | adapt |
-| G046 | `⊤` | `⊤` | — | Encode | Represent `Y` in mixed radix `X`. | 4 | later |
-| G047 | `⊥` | `⊥` | — | Decode | Evaluate `Y` in mixed radix `X`. | 4 | later |
+| G045 | `⌹` | `⌹` | Matrix inverse | Matrix divide | Monad: `inv` if square 2-d, else `pinv` (0-d is reciprocal). Dyad: Haply `(⌹ X Y)` is Dyalog `X⌹Y` — solve `Y B = X` (`torch.linalg.solve` / `lstsq`), i.e. `Y⁻¹X` when `Y` is square. Rank ≤ 2. | 4 | adapt |
+| G046 | `⊤` | `⊤` | — | Encode | Represent `Y` in mixed radix `X`. `X` rank 0 or 1; result shape `shape(X)+shape(Y)`. A leading 0 radix keeps the remaining value. Dyadic only. | 4 | implement |
+| G047 | `⊥` | `⊥` | — | Decode | Evaluate `Y` in mixed radix `X` by Horner along axis 0 of `Y`. Scalar `X` is a repeated radix. `X` rank 0 or 1. Dyadic only. | 4 | implement |
 
 ---
 

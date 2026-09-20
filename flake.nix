@@ -36,7 +36,7 @@
         pkgs:
         pkgs.mkShell {
           packages = [ (pkgs.python3.withPackages pythonPackages) ];
-          # Architecture tree has no pyproject; the repo root is the import path.
+          # Official loop is PYTHONPATH, not an editable install (decision 11).
           env.PYTHONPATH = toString ./.;
         };
 

@@ -6,6 +6,7 @@ not this file.
 
 ## Facts
 
+- Install: no PyPI. Path or git dependency. Nix shell to develop Haply.
 - Host: Hy 1.2.0, prefix S-expressions, Lisp evaluation.
 - Values: `torch.Tensor` (only backend shipped). No Haply array class.
 - Broadcast: PyTorch. Not APL conformability.
@@ -31,7 +32,7 @@ does not shadow a core macro.
 
 Safe ordinary calls: `×` `÷` `⍟` `||` `⌊` `⌈` `≤` `==` `≥` `≁` `∧` `∨`
 `⍲` `⍱` `⍴` `++` `⍪` `⌽` `⊖` `⍉` `↑` `↓` `⊢` `⊣` `≠` `≡` `≢` `○` `!`
-`⍳` `⍸` `∊` `⌷` `⊃` `∪` `∩` `⍋` `⍒`.
+`⍳` `⍸` `∊` `⌷` `⊃` `∪` `∩` `⍋` `⍒` `⍷` `?` `⌹` `⊤` `⊥`.
 
 ## Shipped names
 
@@ -43,10 +44,12 @@ Folds (`+` `×` `⌊` `⌈` `∧` `∨`): 1 = monad, 2 = dyad, 3+ = reduce over
 
 **Structure.** `⍴` `++` `⍪` `⌽` `⊖` `⍉` `↑` `↓` `⊢` `⊣` `≠` `≡` `≢`
 
-**Search.** `⍳` `⍸` `∊` `⌷` `⊃` `∪` `∩` `⍋` `⍒`
+**Search.** `⍳` `⍸` `∊` `⌷` `⊃` `∪` `∩` `⍋` `⍒` `⍷`
+
+**Numeric.** `?` `⌹` `⊤` `⊥`
 
 **Operators** (`require haply.macros`). `⌿` `⌿_` `⍀` `⍀_` `⍨` `·`
-`outer` `¨`. Not `∘.` (Hy cannot parse it).
+`outer` `¨`. Not `∘.` (Hy cannot parse it). No jot `∘` yet.
 
 ## Do / do not
 
@@ -60,9 +63,10 @@ Folds (`+` `×` `⌊` `⌈` `∧` `∨`): 1 = monad, 2 = dyad, 3+ = reduce over
 - Do treat monadic `≠` as a same-shape ravel unique-mask.
 - Do use `||` as magnitude / residue of `Y` by `X`.
 - Do treat `⍳` not-found as `n`. Do treat `⍋` as numeric only.
+- Do treat `(⌹ X Y)` as solve `Y B = X`. Do treat `?` bounds as `[0, n)`.
 - Do `require` operators; kernel expansions need `torch` in the file.
 - Do not import NumPy through Haply.
 
 Pages: [README](README.md), [scalars](scalars.md),
 [structure](structure.md), [search](search.md),
-[operators](operators.md), [recipes](recipes.md).
+[operators](operators.md), [numeric](numeric.md), [recipes](recipes.md).

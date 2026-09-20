@@ -1,4 +1,4 @@
-(import haply [⍳ ⍸ ∊ ⌷ ⊃ ∪ ∩ ⍋ ⍒ ≁])
+(import haply [⍳ ⍸ ∊ ⌷ ⊃ ∪ ∩ ⍋ ⍒ ≁ ⍷])
 (import torch)
 (import pytest)
 
@@ -120,3 +120,34 @@
 
 (defn test-without []
   (assert (torch.equal (≁ (T 1 2 3 2) (T 2 4)) (T 1 3))))
+
+;; --- G039 ⍷ ---------------------------------------------------------------
+
+(defn test-find-vector []
+  (assert (torch.equal (⍷ (T 1 2) (T 0 1 2 1 2 9))
+                       (torch.tensor [False True False True False False]))))
+
+(defn test-find-overlap []
+  (assert (torch.equal (⍷ (T 1 1) (T 1 1 1))
+                       (torch.tensor [True True False]))))
+
+(defn test-find-scalar []
+  (assert (torch.equal (⍷ 3 (T 1 3 3 2))
+                       (torch.tensor [False True True False]))))
+
+(defn test-find-matrix []
+  (setv y (torch.tensor [[1 0 1 0]
+                         [0 1 0 1]])
+        x (torch.tensor [[1 0]
+                         [0 1]]))
+  (assert (torch.equal (⍷ x y)
+                       (torch.tensor [[True False True False]
+                                      [False False False False]]))))
+
+(defn test-find-rank-too-high []
+  (assert (torch.equal (⍷ (torch.tensor [[1 2]]) (T 1 2))
+                       (torch.tensor [False False]))))
+
+(defn test-find-error []
+  (with [(pytest.raises TypeError)]
+    (⍷ (T 1))))

@@ -71,4 +71,36 @@
 (setv ⍋ (tmonad "⍋" grade-up))
 (setv ⍒ (tmonad "⍒" grade-down))
 
-(setv __all__ ["∪" "∩" "⍋" "⍒"])
+;; --- G039 ⍷ ---------------------------------------------------------------
+;; Boolean mask, same shape as Y, True where X begins as a sub-array.
+;; If rank(X) < rank(Y), X is left-padded with 1s. Rank(X) > rank(Y)
+;; finds nothing. A 0-size axis in X finds nothing.
+
+(defn find-dyad [x y]
+  (when (> x.ndim y.ndim)
+    (return (torch.zeros (list y.shape) :dtype torch.bool :device y.device)))
+  (when (and (= x.ndim 0) (= y.ndim 0))
+    (return (torch.eq x y)))
+  (setv x (if (< x.ndim y.ndim)
+            (torch.reshape x (+ (lfor _ (range (- y.ndim x.ndim)) 1)
+                                (list x.shape)))
+            x)
+        out (torch.zeros (list y.shape) :dtype torch.bool :device y.device))
+  (for [[xs ys] (zip x.shape y.shape)]
+    (when (> xs ys)
+      (return out)))
+  (when (in 0 (list x.shape))
+    (return out))
+  (setv w y)
+  (for [ax (range y.ndim)]
+    (setv w (.unfold w ax (get x.shape ax) 1)))
+  (setv hit (torch.eq w x))
+  (for [_ (range y.ndim)]
+    (setv hit (torch.all hit :dim -1)))
+  (setv sl (tuple (lfor s hit.shape (slice None s))))
+  (setv (get out sl) hit)
+  out)
+
+(setv ⍷ (tdyad "⍷" find-dyad))
+
+(setv __all__ ["∪" "∩" "⍋" "⍒" "⍷"])

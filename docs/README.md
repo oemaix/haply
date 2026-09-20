@@ -39,5 +39,5 @@ They are not decisions.
 
 ## Status
 
-Phases 0–3 are implemented for PyTorch. Continue with Phase 4 in
+Phases 0–4 are implemented for PyTorch. Continue with Phase 5 in
 [architecture.md](architecture.md).

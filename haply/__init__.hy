@@ -2,12 +2,12 @@
 (import haply.scalar [+ - × ÷ ** ⍟ || ⌊ ⌈ < ≤ == ≥ > ≁ ∧ ∨ ⍲ ⍱])
 (import haply.structural [⍴ ++ ⍪ ⌽ ⊖ ⍉ ↑ ↓ ⊢ ⊣])
 (import haply.compare [≠ ≡ ≢])
-(import haply.numeric [○ !])
+(import haply.numeric [○ ! ? ⌹ ⊤ ⊥])
 (import haply.select [⍳ ⍸ ∊ ⌷ ⊃])
-(import haply.search [∪ ∩ ⍋ ⍒])
+(import haply.search [∪ ∩ ⍋ ⍒ ⍷])
 
 (setv __all__ ["+" "-" "×" "÷" "**" "⍟" "||" "⌊" "⌈"
                "<" "≤" "==" "≥" ">" "≁" "∧" "∨" "⍲" "⍱" "⍴"
                "++" "⍪" "⌽" "⊖" "⍉" "↑" "↓" "⊢" "⊣"
-               "≠" "≡" "≢" "○" "!"
-               "⍳" "⍸" "∊" "⌷" "⊃" "∪" "∩" "⍋" "⍒"])
+               "≠" "≡" "≢" "○" "!" "?" "⌹" "⊤" "⊥"
+               "⍳" "⍸" "∊" "⌷" "⊃" "∪" "∩" "⍋" "⍒" "⍷"])

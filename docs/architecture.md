@@ -19,6 +19,7 @@ haply/                      repository root
   README.md
   flake.nix                 required (decision 11)
   flake.lock                required (decision 11)
+  pyproject.toml            install metadata (decision 52)
   docs/                     this suite
   haply/                    the package
     __init__.py             package marker; optional Python re-export
@@ -185,6 +186,10 @@ Done when `(⌿ + (× A B))` matches `sum(A * B, dim=0)` and
 ### Phase 4 — remaining functions
 
 Random, find, matrix divide, encode/decode.
+
+Done when `(? k n)` is a deal of `k` distinct integers in `[0, n)`,
+`(⌹ X Y)` solves `Y B = X`, and `(⊥ X (⊤ X Y))` recovers a small
+integer `Y`. **Met** for PyTorch. Jot `∘` stays Phase 5.
 
 ### Phase 5 — trains and later operators
 

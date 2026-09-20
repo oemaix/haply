@@ -11,9 +11,9 @@ Prose here is English.
 
 ## Status
 
-Phases 0–3 are available on `torch.Tensor`. NumPy and a Python-first
+Phases 0–4 are available on `torch.Tensor`. NumPy and a Python-first
 import surface are not shipped. Operators are macros:
-`(require haply.macros [⌿ · outer …])`.
+`(require haply.macros [⌿ · outer …])`. Jot `∘` and trains are Phase 5.
 
 ## What Haply is
 
@@ -31,12 +31,30 @@ broadcasting, no APL parser, no Haply array type.
 
 ## Install
 
-Work in the repo’s Nix shell. `PYTHONPATH` is the repository root, so
-`(import haply)` works there. There is no PyPI package yet.
+There is no PyPI release yet.
+
+To **develop Haply**, use the Nix shell. `PYTHONPATH` is the repository
+root, so `(import haply)` works there.
 
 ```sh
 nix develop
 ```
+
+To **use Haply from another project**, depend on this repo. A local
+editable path is the usual choice while the phases are still landing:
+
+```sh
+uv add --editable /path/to/haply
+```
+
+Pin a Git revision when you need a frozen tree:
+
+```sh
+uv add "haply @ git+https://github.com/oemaix/haply.git@<commit>"
+```
+
+The other project must provide Hy 1.2.0 and a `torch` that Haply can
+import. Nix remains the version pin for developing Haply itself.
 
 ## Import
 
@@ -99,8 +117,9 @@ These Dyalog characters are **not** Haply names.
 | --- | --- |
 | [scalars.md](scalars.md) | Arithmetic, compare, logic, circular, factorial |
 | [structure.md](structure.md) | Shape, ravel, reverse, take/drop, match, tally |
-| [search.md](search.md) | Iota, where, membership, unique, grade, index |
+| [search.md](search.md) | Iota, where, membership, unique, grade, find, index |
 | [operators.md](operators.md) | Reduce, scan, replicate, commute, inner/outer, each |
+| [numeric.md](numeric.md) | Roll/deal, matrix inverse/divide, encode/decode |
 | [recipes.md](recipes.md) | Short programs that run today |
 | [ai.md](ai.md) | Compact sheet for assistants |
 

@@ -4,7 +4,7 @@ Programs that run on today’s public API.
 
 ```hy
 (import torch)
-(import haply [⍴ × ÷ ⌽ ++ ⍪ ↑ ⊖ ≢ ⍳])
+(import haply [⍴ × ÷ ⌽ ++ ⍪ ↑ ⊖ ≢ ⍳ ⊤ ⊥])
 (import haply.scalar :as sc)
 (require haply.macros [⌿ ·])
 ```
@@ -77,4 +77,12 @@ Dyalog sketches `+⌿ A × B` and `A +.× B`:
 
 ```hy
 (↑ 3 (⍳ 8))            ; [0 1 2]
+```
+
+## Encode, then decode
+
+```hy
+(setv rad (torch.tensor [2 2 2 2])
+      y (torch.tensor 10))
+(⊥ rad (⊤ rad y))      ; 10
 ```

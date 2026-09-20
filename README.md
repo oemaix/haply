@@ -21,8 +21,8 @@ which is a joke for a deterministic numeric library.
 
 ## Status
 
-Phases 0–3 are implemented for `torch.Tensor` (item 21: NumPy waits).
-Next is Phase 4 — remaining functions — in
+Phases 0–4 are implemented for `torch.Tensor` (item 21: NumPy waits).
+Next is Phase 5 — trains and jot `∘` — in
 [docs/architecture.md](docs/architecture.md).
 
 The user manual lives in [`manual/`](manual/README.md). The official
@@ -75,13 +75,14 @@ Open questions keep their number when they are decided. Do not renumber.
 ## Development
 
 Build and test in Nix. A `flake.nix` at the repository root is required
-(see [docs/development.md](docs/development.md)).
+(see [docs/development.md](docs/development.md)). Other projects depend
+via `pyproject.toml` (path or git). There is no PyPI release yet.
 
 ```sh
 nix develop
 ```
 
-Phases 0–3 are in. Next is the Phase 4 checklist in
+Phases 0–4 are in. Next is the Phase 5 checklist in
 [docs/glyphs.md](docs/glyphs.md#12-implementation-checklist-what-we-will-build).
 
 ## License
