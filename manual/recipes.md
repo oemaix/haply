@@ -4,9 +4,10 @@ Programs that run on today’s public API.
 
 ```hy
 (import torch)
-(import haply [⍴ × ÷ ⌽ ++ ⍪ ↑ ⊖ ≢ ⍳ ⊤ ⊥])
+(import haply [⍴ × ÷ ⌽ ++ ⍪ ↑ ⊖ ≢ ⍳ ⊤ ⊥ ⊣ ⊢])
 (import haply.scalar :as sc)
-(require haply.macros [⌿ ·])
+(require haply.macros [⌿ · ∘])
+(require haply.trains [fork])
 ```
 
 ## Square, then reverse last
@@ -85,4 +86,14 @@ Dyalog sketches `+⌿ A × B` and `A +.× B`:
 (setv rad (torch.tensor [2 2 2 2])
       y (torch.tensor 10))
 (⊥ rad (⊤ rad y))      ; 10
+```
+
+## Fork a plus; compose signum
+
+```hy
+(setv X (torch.tensor [1 2 3])
+      Y (torch.tensor [10 20 30]))
+(fork ⊣ + ⊢ X Y)       ; [11 22 33]
+(∘ × + (torch.tensor [-2 0 4]))
+; [-1 0 1]
 ```

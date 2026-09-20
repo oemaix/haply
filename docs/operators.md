@@ -195,7 +195,7 @@ Not Dyalog’s nested-array result structure; the result is a tensor.
 ## Function combination
 
 Decisions 13, 23, and 58. These are Haply macros with the Dyalog glyphs.
-They ship in Phase 5. Item 48 does not gate these four glyphs.
+They shipped in Phase 5. Item 48 does not gate these four glyphs.
 
 J-style hook is not a separate form. It is already beside, behind, atop,
 or over.
@@ -234,9 +234,13 @@ Atop is the glyph, not `(atop …)`.
 ### Behind — `⍛`
 
 ```hy
-(⍛ f g Y)      ; (f (g Y))          ; confirm against Dyalog monadic behind
+(⍛ f g Y)      ; (f (g Y))
 (⍛ f g X Y)    ; ((g X) f Y)
 ```
+
+Not Dyalog behind. Dyalog `f⍛g Y` is `(f Y) g Y` and `X f⍛g Y` is
+`(f X) g Y`. Haply uses the same monadic composition as `∘` `⍤` `⍥`,
+and the dyad `((g X) f Y)`.
 
 ### Over — `⍥`
 

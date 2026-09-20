@@ -185,3 +185,21 @@
         (torch.stack (list (map f (torch.unbind x 0) (torch.unbind y 0)))))
     True
       (raise (TypeError (.format "¨ takes 2 or 3 arguments, got {}" (+ n 1))))))
+
+(defn fork-wing [op #* args]
+  "Call `op` if it is a function; otherwise it is a constant fork wing."
+  (if (callable op)
+    (op #* args)
+    op))
+
+(defn beside-or-bind [a b y]
+  "Runtime ∘ with three forms: compose, or bind one array operand."
+  (cond
+    (and (callable a) (callable b))
+      (a (b y))
+    (and (not (callable a)) (callable b))
+      (b a y)
+    (and (callable a) (not (callable b)))
+      (a y b)
+    True
+      (raise (TypeError "∘ needs two functions, or one function and one array"))))

@@ -5,7 +5,8 @@ Operators are **macros**. Require them; do not `import` them.
 ```hy
 (import torch)
 (import haply [× ⌽])
-(require haply.macros [⌿ ⌿_ ⍀ ⍀_ ⍨ · outer ¨])
+(require haply.macros [⌿ ⌿_ ⍀ ⍀_ ⍨ · outer ¨ ∘ ⍤ ⍥ ⍛])
+(require haply.trains [fork])
 ```
 
 Known operands (`+` `×` `⌈` `⌊` for reduce/scan; `+ ×` for inner
@@ -81,3 +82,58 @@ Anything else maps over major cells and `stack`s.
 (¨ ⌽ (torch.tensor [[1 2 3] [4 5 6]]))
 ; [[3 2 1] [6 5 4]]
 ```
+
+## Beside and bind — `∘`
+
+Two functions compose. One function and one array bind.
+
+```hy
+(∘ × + Y)        ; (× (+ Y))
+(∘ 2 × Y)        ; (× 2 Y)
+(∘ × 2 Y)        ; (× Y 2)
+(∘ sc.- × X Y)   ; (sc.- X (× Y))
+```
+
+Hy call-position `+` is identity on reals, so `(∘ × + Y)` is signum of `Y`.
+A function stored in a name still composes: `(∘ sign × Y)` if `sign` is
+callable.
+
+## Atop — `⍤`
+
+```hy
+(⍤ × + Y)              ; (× (+ Y))
+(⍤ sc.- × X Y)         ; (sc.- (× X Y))
+```
+
+An integer right operand is rank, and is a `TypeError` in this phase.
+
+## Over — `⍥`
+
+```hy
+(⍥ + × X Y)            ; (+ (× X) (× Y))
+```
+
+## Behind — `⍛`
+
+Haply, not Dyalog: the monad is `(f (g Y))`; the dyad is `((g X) f Y)`.
+
+```hy
+(⍛ × + Y)              ; (× (+ Y))
+(⍛ + ⊢ X Y)            ; (+ X Y)
+```
+
+## Fork — `(fork …)`
+
+The 3-train only. Require `haply.trains`, not `haply.macros`.
+
+```hy
+(fork ⊣ + ⊢ X Y)       ; (+ X Y)
+(fork ⊢ + ⊢ Y)         ; (+ Y Y)
+(fork 0 + ⊢ Y)         ; (+ 0 Y)
+```
+
+A longer fork is a `TypeError`. Wings that are known glyphs or integer
+literals expand in place; anything else is a constant unless it is
+callable.
+
+Call-position `+` in a fork is Hy `+`, which already adds tensors.

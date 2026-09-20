@@ -38,6 +38,7 @@ haply/                      repository root
     test_scalar.hy
     test_structural.hy
     test_operators.hy
+    test_trains.hy
     test_dispatch.hy
 ```
 
@@ -55,7 +56,8 @@ Functions (selective, opt-in shadowing — decision 53):
 Macros:
 
 ```hy
-(require haply.macros [⌿ ⌿_ ⍀ ⍀_ ⍨ · outer ¨])
+(require haply.macros [⌿ ⌿_ ⍀ ⍀_ ⍨ · outer ¨ ∘ ⍤ ⍥ ⍛])
+(require haply.trains [fork])
 ```
 
 Phase 5 adds `∘` `⍤` `⍥` `⍛` here and `(require haply.trains [fork])`.
@@ -205,7 +207,7 @@ Composition macros and the named 3-train. Item 48 is **not** this phase.
 | `⍛` behind | |
 
 Done when `(fork ⊣ + ⊢ X Y)` matches `(+ X Y)` and `(∘ × + Y)` matches
-`(× (+ Y))` on PyTorch tensors.
+`(× (+ Y))` on PyTorch tensors. **Met** for PyTorch.
 
 ### Phase 6 — specified leftovers
 

@@ -12,8 +12,9 @@ not this file.
 - Broadcast: PyTorch. Not APL conformability.
 - Index origin: 0. Compare: exact. No prototypes.
 - Public import: `(import haply [⍴ × ⌽ ⍳ …])` — selective, never `*`.
-- Operators: `(require haply.macros [⌿ ⌿_ ⍀ ⍀_ ⍨ · outer ¨])`.
-- No trains. No Python-first API.
+- Operators: `(require haply.macros [⌿ ⌿_ ⍀ ⍀_ ⍨ · outer ¨ ∘ ⍤ ⍥ ⍛])`.
+- Fork: `(require haply.trains [fork])`. 3-train only.
+- No Python-first API.
 
 ## Call-position traps
 
@@ -49,7 +50,10 @@ Folds (`+` `×` `⌊` `⌈` `∧` `∨`): 1 = monad, 2 = dyad, 3+ = reduce over
 **Numeric.** `?` `⌹` `⊤` `⊥`
 
 **Operators** (`require haply.macros`). `⌿` `⌿_` `⍀` `⍀_` `⍨` `·`
-`outer` `¨`. Not `∘.` (Hy cannot parse it). No jot `∘` yet.
+`outer` `¨` `∘` `⍤` `⍥` `⍛`. Not `∘.` (Hy cannot parse it). `⍤` is
+atop only; an integer right operand is a `TypeError`.
+
+**Train** (`require haply.trains`). `fork` — 3-train only.
 
 ## Do / do not
 
@@ -64,7 +68,8 @@ Folds (`+` `×` `⌊` `⌈` `∧` `∨`): 1 = monad, 2 = dyad, 3+ = reduce over
 - Do use `||` as magnitude / residue of `Y` by `X`.
 - Do treat `⍳` not-found as `n`. Do treat `⍋` as numeric only.
 - Do treat `(⌹ X Y)` as solve `Y B = X`. Do treat `?` bounds as `[0, n)`.
-- Do `require` operators; kernel expansions need `torch` in the file.
+- Do `require` operators and `fork`; kernel expansions need `torch` in the file.
+- Do treat Haply `⍛` as `(f (g Y))` / `((g X) f Y)`, not Dyalog behind.
 - Do not import NumPy through Haply.
 
 Pages: [README](README.md), [scalars](scalars.md),

@@ -1,20 +1,28 @@
 ;; Operator macros. Require this module; do not import it.
 ;; Known operands expand to torch kernels. Anything else calls a helper
 ;; in haply._dispatch (import injected so the caller need not bind haply).
-(import hy.models [Symbol Integer])
+(import hy.models [Symbol Integer Expression])
 
 (eval-and-compile
   (setv _REDUCE {"+" "sum"  "×" "prod"  "⌈" "amax"  "⌊" "amin"}
         _SCAN {"+" "cumsum"  "×" "cumprod"  "⌈" "cummax"  "⌊" "cummin"}
         _SCALAR #{"+" "-" "×" "÷" "**" "⍟" "||" "⌊" "⌈"
                   "<" "≤" "==" "≥" ">" "≁" "∧" "∨" "⍲" "⍱" "○" "!"}
-        _FN (set.union _SCALAR #{"⌽" "⊖" "⍴" "++"}))
+        _FN (set.union _SCALAR #{"⌽" "⊖" "⍴" "++" "⊢" "⊣" "↑" "↓" "⍉"
+                                 "≠" "≡" "≢" "⍪"}))
 
   (defn _sym-str [x]
     (if (isinstance x Symbol) (str x) None))
 
   (defn _int-lit [x]
     (if (isinstance x Integer) (int x) None))
+
+  (defn _known-fn? [x]
+    (setv s (_sym-str x))
+    (or (and s (in s _FN))
+        (and (isinstance x Expression)
+             (isinstance (get x 0) Symbol)
+             (= (str (get x 0)) "."))))
 
   (defn _dispatch-call [fn-sym #* args]
     `(do
@@ -115,3 +123,55 @@
   (if (in (_sym-str f) _SCALAR)
     `(~f ~@args)
     (_dispatch-call 'each-cells f #* args)))
+
+;; --- Phase 5 composition --------------------------------------------------
+
+(defmacro ∘ [#* forms]
+  (setv n (len forms))
+  (cond
+    (= n 3)
+      (do
+        (setv a (get forms 0)
+              b (get forms 1)
+              y (get forms 2))
+        (if (and (_known-fn? a) (_known-fn? b))
+          `(~a (~b ~y))
+          (_dispatch-call 'beside-or-bind a b y)))
+    (= n 4)
+      `(~(get forms 0) ~(get forms 2) (~(get forms 1) ~(get forms 3)))
+    True
+      `(raise (TypeError "∘ takes 3 or 4 forms"))))
+
+(defmacro ⍤ [#* forms]
+  (setv n (len forms))
+  (cond
+    (and (>= n 2) (is-not (_int-lit (get forms 1)) None))
+      `(raise (TypeError "⍤ rank (array operand) is not in Phase 5"))
+    (= n 3)
+      `(~(get forms 0) (~(get forms 1) ~(get forms 2)))
+    (= n 4)
+      `(~(get forms 0) (~(get forms 1) ~(get forms 2) ~(get forms 3)))
+    True
+      `(raise (TypeError "⍤ takes 3 or 4 forms"))))
+
+(defmacro ⍥ [#* forms]
+  (setv n (len forms))
+  (cond
+    (= n 3)
+      `(~(get forms 0) (~(get forms 1) ~(get forms 2)))
+    (= n 4)
+      `(~(get forms 0) (~(get forms 1) ~(get forms 2))
+                       (~(get forms 1) ~(get forms 3)))
+    True
+      `(raise (TypeError "⍥ takes 3 or 4 forms"))))
+
+(defmacro ⍛ [#* forms]
+  ;; Haply (not Dyalog): monad is (f (g Y)); dyad is ((g X) f Y).
+  (setv n (len forms))
+  (cond
+    (= n 3)
+      `(~(get forms 0) (~(get forms 1) ~(get forms 2)))
+    (= n 4)
+      `(~(get forms 0) (~(get forms 1) ~(get forms 2)) ~(get forms 3))
+    True
+      `(raise (TypeError "⍛ takes 3 or 4 forms"))))

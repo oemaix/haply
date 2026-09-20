@@ -39,5 +39,5 @@ They are not decisions.
 
 ## Status
 
-Phases 0–4 are implemented for PyTorch. Continue with Phase 5 (fork and
-jot family; item 48 is Phase 8) in [architecture.md](architecture.md).
+Phases 0–5 are implemented for PyTorch. Continue with Phase 6 (expand)
+in [architecture.md](architecture.md).

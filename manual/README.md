@@ -11,11 +11,11 @@ Prose here is English.
 
 ## Status
 
-Phases 0–4 are available on `torch.Tensor`. NumPy and a Python-first
+Phases 0–5 are available on `torch.Tensor`. NumPy and a Python-first
 import surface are not shipped. Operators are macros:
-`(require haply.macros [⌿ · outer …])`. Fork and jot (`∘` `⍤` `⍥` `⍛`)
-are Phase 5. Expand is Phase 6. NumPy is Phase 7. Power, key, stencil,
-rank, and At are Phase 8.
+`(require haply.macros [⌿ · outer ∘ …])`. Fork is
+`(require haply.trains [fork])`. Expand is Phase 6. NumPy is Phase 7.
+Power, key, stencil, rank, and At are Phase 8.
 
 ## What Haply is
 
@@ -64,7 +64,8 @@ Select the glyphs you need. Do not star-import.
 
 ```hy
 (import haply [⍴ × ÷ ⌽ ++ ⍳])
-(require haply.macros [⌿ · outer])
+(require haply.macros [⌿ · outer ∘])
+(require haply.trains [fork])
 ```
 
 Hy macros and functions do **not** share a namespace. After
@@ -120,14 +121,13 @@ These Dyalog characters are **not** Haply names.
 | [scalars.md](scalars.md) | Arithmetic, compare, logic, circular, factorial |
 | [structure.md](structure.md) | Shape, ravel, reverse, take/drop, match, tally |
 | [search.md](search.md) | Iota, where, membership, unique, grade, find, index |
-| [operators.md](operators.md) | Reduce, scan, replicate, commute, inner/outer, each |
+| [operators.md](operators.md) | Reduce, scan, commute, products, each, jot, fork |
 | [numeric.md](numeric.md) | Roll/deal, matrix inverse/divide, encode/decode |
 | [recipes.md](recipes.md) | Short programs that run today |
 | [ai.md](ai.md) | Compact sheet for assistants |
 
 ## Not in this manual yet
 
-- Fork and jot (`fork` `∘` `⍤` `⍥` `⍛`) — Phase 5
 - Expand (`⍀` with an array operand) — Phase 6
 - NumPy backend — Phase 7
 - Power, key, stencil, rank, At — Phase 8
