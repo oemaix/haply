@@ -1,0 +1,39 @@
+name: Bug
+description: Unexpected behaviour from a shipped glyph or operator
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: >
+        For a missing glyph or a design choice, use the spec template.
+        Haply intent on tensors wins over Dyalog when they differ.
+  - type: input
+    id: name
+    attributes:
+      label: Glyph or form
+      description: The Haply name, for example `⍴`, `⌿`, or `(fork ⊣ + ⊢ X Y)`.
+      placeholder: ⍴
+    validations:
+      required: true
+  - type: textarea
+    id: expect
+    attributes:
+      label: Expected
+      description: Haply intent, not a Dyalog session dump.
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual
+      render: text
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Repro
+      description: A short Hy snippet. Say Hy 1.2.0 and the Haply tag or commit.
+      render: hy
+    validations:
+      required: true

@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: User manual
+    url: https://github.com/oemaix/haply/blob/main/manual/README.md
+    about: Shipped glyphs, install, and call forms
+  - name: Specification
+    url: https://github.com/oemaix/haply/blob/main/docs/README.md
+    about: Catalog, decisions, and how to add a glyph

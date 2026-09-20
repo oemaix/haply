@@ -1,0 +1,39 @@
+name: Spec
+description: Catalog change, open decision, or a glyph that should not be guessed
+labels: [spec]
+body:
+  - type: markdown
+    attributes:
+      value: >
+        Use this for design questions. Do not implement a Dyalog edge
+        that the catalog does not already state. New questions get the
+        next free number in `docs/undecided.md`.
+  - type: dropdown
+    id: kind
+    attributes:
+      label: Kind
+      options:
+        - Open or close a numbered decision
+        - Catalog / intent change
+        - New glyph or operator (must already be in the catalog)
+        - Docs only
+    validations:
+      required: true
+  - type: input
+    id: number
+    attributes:
+      label: Decision or glyph id
+      description: For example `21`, `G026`, or “none yet”.
+      placeholder: 64
+  - type: textarea
+    id: ask
+    attributes:
+      label: Question
+      description: What must be true before code can change.
+    validations:
+      required: true
+  - type: textarea
+    id: options
+    attributes:
+      label: Options
+      description: Short A / B / C if you have them. Working defaults are not decisions.
