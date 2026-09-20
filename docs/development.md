@@ -42,9 +42,9 @@ hy -m pytest tests
 ```
 
 `pyproject.toml` is install metadata (decision 52) so other projects can
-depend on a local path or a Git pin. It is not the version pin;
-`flake.lock` is. Do not require a global `pip install` as the official
-path.
+depend on a local path or a Git pin. The package version is `0.1.0`;
+the matching tag is `v0.1.0`. Nix `flake.lock` remains the toolchain
+pin. Do not require a global `pip install` as the official path.
 
 ## Layout
 

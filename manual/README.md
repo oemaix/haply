@@ -49,10 +49,10 @@ editable path is the usual choice while the phases are still landing:
 uv add --editable /path/to/haply
 ```
 
-Pin a Git revision when you need a frozen tree:
+Pin a Git tag when you need a frozen tree:
 
 ```sh
-uv add "haply @ git+https://github.com/oemaix/haply.git@<commit>"
+uv add "haply @ git+https://github.com/oemaix/haply.git@v0.1.0"
 ```
 
 The other project must provide Hy 1.2.0 and a `torch` that Haply can

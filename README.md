@@ -76,7 +76,8 @@ Open questions keep their number when they are decided. Do not renumber.
 
 Build and test in Nix. A `flake.nix` at the repository root is required
 (see [docs/development.md](docs/development.md)). Other projects depend
-via `pyproject.toml` (path or git). There is no PyPI release yet.
+via `pyproject.toml` (path or git). The first Git tag is `v0.1.0`.
+There is no PyPI release yet.
 
 ```sh
 nix develop
