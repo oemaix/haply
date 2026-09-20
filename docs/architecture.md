@@ -59,7 +59,8 @@ Macros:
 ```
 
 Phase 5 adds `∘` `⍤` `⍥` `⍛` here and `(require haply.trains [fork])`.
-`outer` is the Hy-legal head for catalog `∘.` (item 61).
+`outer` is the Hy-legal head for catalog `∘.` (item 61). `⍤` in Phase 5
+is atop (function operand) only; rank (array operand) waits on item 48.
 
 A convenience star-import or star-require should not be the documented
 path. Document the two-step import/require.
@@ -96,7 +97,7 @@ the intended shape of dispatch, not Phase 1 work.
 ### Constructors
 
 `(⍳ n)` and friends have no tensor argument. Decision 30 default: produce
-a CPU `torch.Tensor`. Provide `(⍳ n :backend 'numpy)` only if Phase 3
+a CPU `torch.Tensor`. Provide `(⍳ n :backend 'numpy)` only when Phase 7
 needs it; do not add kwargs casually.
 
 ## Dispatch helper
@@ -189,11 +190,66 @@ Random, find, matrix divide, encode/decode.
 
 Done when `(? k n)` is a deal of `k` distinct integers in `[0, n)`,
 `(⌹ X Y)` solves `Y B = X`, and `(⊥ X (⊤ X Y))` recovers a small
-integer `Y`. **Met** for PyTorch. Jot `∘` stays Phase 5.
+integer `Y`. **Met** for PyTorch.
 
-### Phase 5 — trains and later operators
+### Phase 5 — fork and jot family
 
-`fork` plus `∘` `⍤` `⍥` `⍛`. Then the later glyphs in item 48.
+Composition macros and the named 3-train. Item 48 is **not** this phase.
+
+| Ship | Leave |
+| --- | --- |
+| `(fork f g h …)` — 3-train only | longer forks |
+| `∘` beside (two functions, then bind) | |
+| `⍤` atop (function operand) | `⍤` rank (array operand) — item 48 |
+| `⍥` over | `⍣` `⌸` `⌺` At — item 48 |
+| `⍛` behind | |
+
+Done when `(fork ⊣ + ⊢ X Y)` matches `(+ X Y)` and `(∘ × + Y)` matches
+`(× (+ Y))` on PyTorch tensors.
+
+### Phase 6 — specified leftovers
+
+Work already in the catalog that is not item 48 and not a new backend.
+Finish the PyTorch surface before the NumPy sweep.
+
+- Expand: array operand on `⍀` / `⍀_` (G056, G057). Fill is backend
+  zero (decision 33).
+
+Done when `(⍀ mask Y)` inserts fill along axis 0 and `(⍀_ mask Y)`
+does the same on the last axis.
+
+### Phase 7 — NumPy backend
+
+Item 21 working default C: repeat the **already shipped** glyphs on
+`numpy.ndarray`. Mixed torch/NumPy still errors. Python natives stay
+out. This phase does not close item 21.
+
+Done when `(+ a a)` and `(⍴ a)` on a NumPy array return a NumPy array,
+and a torch/NumPy mix raises `TypeError`.
+
+### Phase 8 — item 48 operators
+
+Do not start until item 48 closes, or an explicit pull-forward names
+which of these ship:
+
+- Power `⍣`
+- Key `⌸`
+- Stencil `⌺`
+- Rank (array operand of `⍤`)
+- At (not `@`)
+
+No done-when until that item moves.
+
+### After Phase 8
+
+New phase numbers only when a decision pulls work forward. Still
+decision-gated, not a phase:
+
+- Python natives and whether every glyph must take all backends (21)
+- Python-first API (22)
+- Comparison tolerance (29), constructor backend (30), fill/zilde (33)
+- General axis (34), circular-table extent (47)
+- Aliases, oracles, package-layout close (39, 54, 55)
 
 ## Per-glyph implementation recipe
 

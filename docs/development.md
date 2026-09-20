@@ -85,9 +85,9 @@ Minimum for each implemented glyph:
 - one broadcast case for scalar dyadics;
 - one error case (wrong arity or impossible shape).
 
-Phase 1 tests `torch.Tensor`. Cover `numpy.ndarray` once that backend
-exists (item 21). Python natives wait on the same item; they are not a
-Phase 1 requirement.
+Phases 1–6 test `torch.Tensor`. Cover `numpy.ndarray` in Phase 7
+(item 21). Python natives wait on the same item; they are not a
+Phase 1–7 requirement.
 
 ## Style
 

@@ -104,7 +104,7 @@ time when it can; otherwise at runtime.
 | --- | --- |
 | Dyalog | `X\Y`, `X⍀Y` |
 | Haply | `(⍀ X Y)`, `(⍀_ X Y)` |
-| Phase | 3 |
+| Phase | 6 |
 | Status | later |
 
 **Intent.** Insert fill along the axis where `X` is 0. Fill is the backend
@@ -195,7 +195,7 @@ Not Dyalog’s nested-array result structure; the result is a tensor.
 ## Function combination
 
 Decisions 13, 23, and 58. These are Haply macros with the Dyalog glyphs.
-They are specified now; shipping order is item 48.
+They ship in Phase 5. Item 48 does not gate these four glyphs.
 
 J-style hook is not a separate form. It is already beside, behind, atop,
 or over.
@@ -224,8 +224,10 @@ it is a function.
 ```hy
 (⍤ f g Y)      ; (f (g Y))
 (⍤ f g X Y)    ; (f (X g Y))
-(⍤ f r Y)      ; apply f to rank-r cells (array operand)
 ```
+
+Phase 5 is the function-operand (atop) reading only. Rank
+`(⍤ f r Y)` is item 48 / Phase 8.
 
 Atop is the glyph, not `(atop …)`.
 
@@ -245,8 +247,7 @@ Atop is the glyph, not `(atop …)`.
 
 ## Later operators
 
-Specified so names stay stable. Not Phase 1–3 work unless item 48 pulls
-one forward.
+Specified so names stay stable. Phase 8, after item 48. Not Phase 5.
 
 ### Power — `⍣`
 
@@ -262,18 +263,18 @@ Working default: integer `n` only, including `0` (identity) and negative
 
 Dyalog `@` is selective replacement. Haply does not take `@` (decision
 23: `@` stays Hy/Python matmul). If At ships, it needs another spelling.
-Later (item 48).
+Phase 8 (item 48).
 
 ### Key — `⌸`
 
 Group major cells by key and apply `f` to each group. Tensor analogue of
-`groupby`. Later.
+`groupby`. Phase 8.
 
 ### Stencil — `⌺`
 
-Sliding windows plus `f`. Natural fit for conv-like work. Later. Prefer
-expanding known stencils to `unfold` / convolution rather than Python
-loops.
+Sliding windows plus `f`. Natural fit for conv-like work. Phase 8.
+Prefer expanding known stencils to `unfold` / convolution rather than
+Python loops.
 
 ### Dropped operators
 
@@ -297,9 +298,8 @@ Dyalog `(f g h)` on `Y` is `(f Y) g (h Y)`; on `X Y` is `(X f Y) g (X h Y)`.
 (fork f g h X Y)
 ```
 
-**Intent.** Same as Dyalog 3-trains on functions. Longer forks
-`(fork a b c d e)` follow Dyalog’s even/odd train rules if we implement
-them; v1 working default is the 3-train only.
+**Intent.** Same as Dyalog 3-trains on functions. Phase 5 is the 3-train
+only. Longer forks `(fork a b c d e)` wait; they are not item 48.
 
 `f` and `h` may be arrays (Dyalog constant forks). Working default: allow
 array wings.

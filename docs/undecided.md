@@ -24,8 +24,9 @@ PyTorch tensors?
 **Context.** Decision 9 says “preserve the backend you are given”. The
 compatibility note still asks whether all three are in scope.
 
-Left open on 2026-09-20. Phase 1 implements **PyTorch tensors only**.
-Whether every glyph must later accept all three remains the question.
+Left open on 2026-09-20. Phases 1–6 implement **PyTorch tensors only**.
+Phase 7 is the NumPy shipping slot (working default C). Whether every
+glyph must later accept all three remains the question.
 
 **Options.**
 
@@ -366,10 +367,10 @@ Names for atop, beside, behind, over, and fork are already closed
 (decisions 13 and 58). This item is only about *when* the remaining
 operators ship.
 
-**Working default.** v1 operators: reduce, scan, replicate, expand, inner
-product, outer product, commute, each (if 42 allows). Composition glyphs
-and `fork` are specified; Key, Stencil, Rank-as-array, Power, and At are
-later.
+**Working default.** Composition glyphs and `fork` are Phase 5, not this
+item. Expand (array `⍀`) is Phase 6. Key, Stencil, Rank-as-array, Power,
+and At are Phase 8 — do not start that phase until this item closes or
+an explicit pull-forward names which of them ship.
 
 **Impact.** Roadmap in [architecture.md](architecture.md).
 

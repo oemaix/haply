@@ -21,8 +21,8 @@ which is a joke for a deterministic numeric library.
 
 ## Status
 
-Phases 0–4 are implemented for `torch.Tensor` (item 21: NumPy waits).
-Next is Phase 5 — trains and jot `∘` — in
+Phases 0–4 are implemented for `torch.Tensor` (item 21: NumPy is
+Phase 7). Next is Phase 5 — fork and jot family (`∘` `⍤` `⍥` `⍛`) — in
 [docs/architecture.md](docs/architecture.md).
 
 The user manual lives in [`manual/`](manual/README.md). The official
@@ -82,8 +82,8 @@ via `pyproject.toml` (path or git). There is no PyPI release yet.
 nix develop
 ```
 
-Phases 0–4 are in. Next is the Phase 5 checklist in
-[docs/glyphs.md](docs/glyphs.md#12-implementation-checklist-what-we-will-build).
+Phases 0–4 are in. Next is Phase 5 (fork and jot), then expand, then NumPy
+in [docs/glyphs.md](docs/glyphs.md#12-implementation-checklist-what-we-will-build).
 
 ## License
 

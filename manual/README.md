@@ -13,7 +13,9 @@ Prose here is English.
 
 Phases 0–4 are available on `torch.Tensor`. NumPy and a Python-first
 import surface are not shipped. Operators are macros:
-`(require haply.macros [⌿ · outer …])`. Jot `∘` and trains are Phase 5.
+`(require haply.macros [⌿ · outer …])`. Fork and jot (`∘` `⍤` `⍥` `⍛`)
+are Phase 5. Expand is Phase 6. NumPy is Phase 7. Power, key, stencil,
+rank, and At are Phase 8.
 
 ## What Haply is
 
@@ -125,8 +127,9 @@ These Dyalog characters are **not** Haply names.
 
 ## Not in this manual yet
 
-- Trains and composition (`fork` `∘` `⍤` `⍥` `⍛`)
-- Expand (`⍀` with an array operand)
-- NumPy backend
+- Fork and jot (`fork` `∘` `⍤` `⍥` `⍛`) — Phase 5
+- Expand (`⍀` with an array operand) — Phase 6
+- NumPy backend — Phase 7
+- Power, key, stencil, rank, At — Phase 8
 - English aliases (glyphs are the names)
 - Runtime `__doc__` on every export

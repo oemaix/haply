@@ -203,8 +203,8 @@ glyphs plus `_` (decisions 15, 20, 60).
 | --- | --- | --- | --- | --- | --- | --- |
 | G054 | `/` | `⌿_` | Replicate last | Repeat/select along the last axis by integer mask `X`. | 3 | implement |
 | G055 | `⌿` | `⌿` | Replicate first | Same on axis 0. | 3 | implement |
-| G056 | `\` | `⍀_` | Expand last | Insert zeros/fill along the last axis by boolean/int mask. | 3 | later |
-| G057 | `⍀` | `⍀` | Expand first | Same on axis 0. | 3 | later |
+| G056 | `\` | `⍀_` | Expand last | Insert zeros/fill along the last axis by boolean/int mask. | 6 | later |
+| G057 | `⍀` | `⍀` | Expand first | Same on axis 0. | 6 | later |
 
 When the left operand is a *function* rather than an array, the same
 glyphs are operators (reduce/scan). See decision 60 and
@@ -227,12 +227,12 @@ Full specification: [operators.md](operators.md).
 | G064 | `.` | `·` | Inner product | 3 | implement |
 | G065 | `∘.` | `outer` | Outer product | 3 | implement |
 | G066 | `∘` | `∘` | Beside (jot); function combination | 5 | implement |
-| G067 | `⍤` | `⍤` | Atop (function operand); rank (array operand) | 5 | implement |
+| G067 | `⍤` | `⍤` | Atop (function operand); rank (array operand) | 5 / 8 | implement (atop); rank later (48) |
 | G068 | `⍥` | `⍥` | Over | 5 | implement |
-| G069 | `⍣` | `⍣` | Power operator | 5 | later |
-| G070 | `@` | — | At | 5 | later |
-| G071 | `⌸` | `⌸` | Key | 5 | later |
-| G072 | `⌺` | `⌺` | Stencil | 5 | later |
+| G069 | `⍣` | `⍣` | Power operator | 8 | later (48) |
+| G070 | `@` | — | At | 8 | later (48) |
+| G071 | `⌸` | `⌸` | Key | 8 | later (48) |
+| G072 | `⌺` | `⌺` | Stencil | 8 | later (48) |
 | G073 | `⍛` | `⍛` | Behind | 5 | implement |
 | G074 | `⍠` | — | Variant | — | drop (44) |
 | G075 | `⌶` | — | I-beam | — | drop (44) |
@@ -302,9 +302,21 @@ Build these names. This is the concrete v1-or-specified set.
 
 `?` `⍷` `⌹` `⊤` `⊥`
 
-### Phase 5 — later operators and trains
+### Phase 5 — fork and jot family
 
-`fork` `∘` `⍤` `⍥` `⍛` ; later: `⍣` `⌸` `⌺` and At (not `@`)
+`fork` `∘` `⍤` (atop only) `⍥` `⍛`
+
+### Phase 6 — specified leftovers
+
+`⍀` `⍀_` expand (array operand)
+
+### Phase 7 — NumPy backend
+
+No new glyphs. Repeat shipped names on `numpy.ndarray` (item 21).
+
+### Phase 8 — item 48 operators
+
+`⍣` `⌸` `⌺` ; `⍤` rank (array operand); At (not `@`)
 
 ### Never (unless a new decision says so)
 
