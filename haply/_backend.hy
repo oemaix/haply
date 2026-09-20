@@ -1,11 +1,17 @@
-;; Type detection without importing torch or numpy. A missing backend then
-;; stays optional later (architecture Phase 0 still ships both in the shell).
+;; Type detection uses the type's module name so a missing optional backend
+;; stays optional later. Phase 1 still imports torch: it is required in the
+;; Nix shell, and some kernels need a 0-d tensor for a Python scalar.
+(import torch)
 
 (defn is-torch [x]
-  (= (getattr (type x) "__module__" "") "torch"))
+  (setv mod (getattr (type x) "__module__" ""))
+  (and (or (= mod "torch") (.startswith mod "torch."))
+       (hasattr x "ndim")))
 
 (defn is-numpy [x]
-  (= (getattr (type x) "__module__" "") "numpy"))
+  (setv mod (getattr (type x) "__module__" ""))
+  (and (or (= mod "numpy") (.startswith mod "numpy."))
+       (hasattr x "ndim")))
 
 (defn backend [x]
   (cond
@@ -13,19 +19,43 @@
     (is-numpy x) 'numpy
     True 'python))
 
-(defn route-dyad [x y torch-f numpy-f py-f]
-  "Same backend or Python scalar + tensor. Mixed tensors raise TypeError."
-  (setv bx (backend x)
-        by (backend y))
-  (cond
-    (= bx by)
-      (cond
-        (= bx 'torch) (torch-f x y)
-        (= bx 'numpy) (numpy-f x y)
-        True (py-f x y))
-    (and (= bx 'python) (in by ['torch 'numpy]))
-      (if (= by 'torch) (torch-f x y) (numpy-f x y))
-    (and (= by 'python) (in bx ['torch 'numpy]))
-      (if (= bx 'torch) (torch-f x y) (numpy-f x y))
-    True
-      (raise (TypeError "haply mixed tensor backends"))))
+(defn is-python-number [x]
+  (isinstance x #(int float complex bool)))
+
+(defn require-torch [name x]
+  (if (is-torch x)
+    x
+    (raise (TypeError (.format "{} Phase 1 accepts torch.Tensor, got {}"
+                               name
+                               (type x))))))
+
+(defn torch-monad [name f]
+  "Phase 1 monadic path: torch only (item 21)."
+  (fn [y]
+    (f (require-torch name y))))
+
+(defn as-torch-like [x other]
+  "0-d tensor on other's device. Do not move other (decision 49)."
+  (if (is-torch x)
+    x
+    (torch.as-tensor x :device other.device)))
+
+(defn torch-dyad [name f]
+  "Phase 1 dyadic path: torch+torch or Python number + tensor.
+  Mixed tensor backends error. NumPy and Python+Python wait on item 21."
+  (fn [x y]
+    (setv tx (is-torch x)
+          ty (is-torch y)
+          nx (is-numpy x)
+          ny (is-numpy y))
+    (cond
+      (and tx ty) (f x y)
+      (and tx (is-python-number y)) (f x (as-torch-like y x))
+      (and (is-python-number x) ty) (f (as-torch-like x y) y)
+      (and (or tx nx) (or ty ny) (not (= (backend x) (backend y))))
+        (raise (TypeError "haply mixed tensor backends"))
+      True
+        (raise (TypeError (.format "{} Phase 1 accepts torch.Tensor, got {} and {}"
+                                   name
+                                   (type x)
+                                   (type y)))))))

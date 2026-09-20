@@ -64,11 +64,11 @@ Elementwise. Broadcasting is the backend’s. No APL conformability.
 
 | Id | Dyalog | Haply | Monadic Dyalog | Dyadic Dyalog | Haply intent | Phase | Status |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| G001 | `+` | `+` | Conjugate | Plus | Monadic: conjugate on complex values (decision 31), identity on reals. Dyadic: addition. Variadic fold (decision 37). | 1 | implement |
+| G001 | `+` | `+` | Conjugate | Plus | Monadic: conjugate on complex values (decision 31), identity on reals. Dyadic: addition. Variadic fold (decision 37). Hy's core `+` macro still owns call position `(+ Y)` (unary plus / identity); the Haply function object conjugates. | 1 | implement |
 | G002 | `-` | `-` | Negate | Minus | Negation; subtraction. Negative literals use Hy `-`. No `¯`. | 1 | implement |
 | G003 | `×` | `×` | Direction (signum) | Times | Signum (`sign` / `np.sign`); multiplication. Variadic fold (decision 37). | 1 | implement |
 | G004 | `÷` | `÷` | Reciprocal | Divide | `1/x`; true division. Do not export Hy `/` as divide. | 1 | implement |
-| G005 | `*` | `**` | Exponential | Power | Monadic: `exp`. Dyadic: `x ** y`. | 1 | implement |
+| G005 | `*` | `**` | Exponential | Power | Monadic: `exp`. Dyadic: `x ** y`. Hy's core `**` macro requires two or more arguments, so `(** Y)` is a syntax error; call the function object for monadic exp. | 1 | implement |
 | G006 | `⍟` | `⍟` | Natural log | Logarithm | Monadic: `ln`. Dyadic: log of `Y` in base `X` (`log(Y)/log(X)`). | 1 | implement |
 | G007 | `|` | `||` | Magnitude | Residue | Haply `||` is both valences (decision 24). Residue follows Dyalog sign convention *if* easy on the backend, otherwise document the backend `remainder`/`fmod` choice. | 1 | adapt |
 | G008 | `⌊` | `⌊` | Floor | Minimum | Floor; elementwise min. Variadic fold (decision 37). | 1 | implement |

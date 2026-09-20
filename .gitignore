@@ -1,5 +1,6 @@
 /.venv
 /.cursor
+/.vscode
 /tmp
 /result
 /.pytest_cache
