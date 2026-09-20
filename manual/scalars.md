@@ -63,7 +63,7 @@ function rather than Hy’s comparison.
 
 | Glyph | Monad | Dyad | Fold |
 | --- | --- | --- | --- |
-| `≁` | logical not | *not shipped* (without is Phase 3) | |
+| `≁` | logical not | without: ravel of `X` not in `Y` | |
 | `∧` | — | bool and; integer LCM | yes |
 | `∨` | — | bool or; integer GCD | yes |
 | `⍲` | — | nand | |
@@ -75,6 +75,7 @@ Floats and mixed bool/int raise `ValueError` on `∧` `∨`.
 (import haply [≁ ∧ ∨])
 
 (≁ (torch.tensor [False True]))          ; [True, False]
+(≁ (torch.tensor [1 2 3 2]) (torch.tensor [2 4]))  ; [1 3]
 (∧ (torch.tensor [True False]) True)     ; [True, False]
 (∧ (torch.tensor [4 6]) (torch.tensor [6 9]))  ; LCM [12, 18]
 ```

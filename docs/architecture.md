@@ -54,9 +54,11 @@ Functions (selective, opt-in shadowing — decision 53):
 Macros:
 
 ```hy
-(require haply.macros [⌿ ⌿_ ⍀ ⍀_ ⍨ · ∘ ⍤ ⍥ ⍛])
-(require haply.trains [fork])
+(require haply.macros [⌿ ⌿_ ⍀ ⍀_ ⍨ · outer ¨])
 ```
+
+Phase 5 adds `∘` `⍤` `⍥` `⍛` here and `(require haply.trains [fork])`.
+`outer` is the Hy-legal head for catalog `∘.` (item 61).
 
 A convenience star-import or star-require should not be the documented
 path. Document the two-step import/require.
@@ -178,7 +180,7 @@ Reduce, scan, replicate, commute, inner/outer product, iota, where,
 membership, unique, grade, index.
 
 Done when `(⌿ + (× A B))` matches `sum(A * B, dim=0)` and
-`(· + × A B)` matches `matmul`.
+`(· + × A B)` matches `matmul`. **Met** for PyTorch.
 
 ### Phase 4 — remaining functions
 

@@ -8,7 +8,8 @@ The name fuses **Hy** and **APL**. It is short, lowercase, and reads as a
 normal Python import:
 
 ```hy
-(import haply [⍴ ⌿ +])
+(import haply [⍴ +])
+(require haply.macros [⌿])
 ```
 
 In English, *haply* means “by chance” or “perhaps”. The name is an intentional

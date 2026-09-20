@@ -119,7 +119,7 @@ zero (decision 33), not an APL prototype.
 | Dyalog | `f¨Y`, `X f¨Y` |
 | Haply | `(¨ f Y)`, `(¨ f X Y)` |
 | Phase | 3 |
-| Status | undecided (42) |
+| Status | implement (item 42 working default) |
 
 **Working intent.** Map `f` over major cells and stack the results. If `f`
 is a Haply scalar function, the macro should refuse to loop and should
@@ -178,13 +178,15 @@ Hy/Python matmul. Function combination is jot `∘` (decisions 13 and 23).
 | | |
 | --- | --- |
 | Dyalog | `X ∘.g Y` |
-| Haply | `(∘. g X Y)` (decision 59) |
+| Haply | `(outer g X Y)` (decision 59 name `∘.`; item 61) |
 | Phase | 3 |
 | Status | implement |
 
 **Intent.** All-pairs `g` on elements (or on cells, if we document cells).
 Working default: elementwise outer — result shape `shape(X) + shape(Y)`,
 like `np.multiply.outer` when `g` is `×`.
+
+Hy cannot parse `∘.` as a symbol (item 61). The macro head is `outer`.
 
 Not Dyalog’s nested-array result structure; the result is a tensor.
 

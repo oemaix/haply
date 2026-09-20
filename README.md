@@ -21,8 +21,8 @@ which is a joke for a deterministic numeric library.
 
 ## Status
 
-Phases 0–2 are implemented for `torch.Tensor` (item 21: NumPy waits).
-Next is Phase 3 — operators and search — in
+Phases 0–3 are implemented for `torch.Tensor` (item 21: NumPy waits).
+Next is Phase 4 — remaining functions — in
 [docs/architecture.md](docs/architecture.md).
 
 The user manual lives in [`manual/`](manual/README.md). The official
@@ -81,7 +81,7 @@ Build and test in Nix. A `flake.nix` at the repository root is required
 nix develop
 ```
 
-Phases 0–2 are in. Next is the Phase 3 checklist in
+Phases 0–3 are in. Next is the Phase 4 checklist in
 [docs/glyphs.md](docs/glyphs.md#12-implementation-checklist-what-we-will-build).
 
 ## License

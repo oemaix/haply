@@ -72,9 +72,13 @@
 (setv > (tdyad ">" torch.gt))
 
 ;; --- G021 ≁ ---------------------------------------------------------------
-;; Monadic logical not is Phase 1. Dyadic without waits for Phase 3.
+;; Monadic: logical not. Dyadic: values of X not in Y (ravel, stable).
 
-(setv ≁ (tmonad "≁" torch.logical-not))
+(defn without-dyad [x y]
+  (setv xf (torch.flatten x))
+  (get xf (torch.logical-not (torch.isin xf y))))
+
+(setv ≁ (tprim "≁" torch.logical-not without-dyad))
 
 ;; --- G022 ∧ / G023 ∨ ------------------------------------------------------
 ;; Boolean AND/OR; integer LCM/GCD (decision 46). Floats are ValueError.

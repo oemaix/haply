@@ -436,3 +436,23 @@ almost always 0 or 1.
 else `1`. Not `numel`.
 
 **Impact.** `≢`, reductions over major cells.
+
+---
+
+## 61. Writable name for outer product
+
+**Question.** Decision 59 names outer product `∘.`. Hy 1.2 cannot parse
+that as an identifier (`∘` then `.` is attribute syntax). What do we
+`defmacro`?
+
+**Options.**
+
+- A. Writable name `outer`. Catalog keeps `∘.` as the Dyalog/decision
+  name; the Hy head is `outer`.
+- B. Invent another glyph that Hy can parse.
+- C. Overload jot `∘` for outer (rejected by decision 59).
+
+**Working default.** A. `(outer g X Y)`. Not an English alias in the
+decision-39 sense: it is the only Hy-legal spelling of G065.
+
+**Impact.** `haply.macros`, G065, user manual.

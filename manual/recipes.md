@@ -1,11 +1,12 @@
 # Recipes
 
-Programs that run on today’s public API. No operators, no search glyphs.
+Programs that run on today’s public API.
 
 ```hy
 (import torch)
-(import haply [⍴ × ÷ ⌽ ++ ⍪ ↑ ⊖ ≢])
+(import haply [⍴ × ÷ ⌽ ++ ⍪ ↑ ⊖ ≢ ⍳])
 (import haply.scalar :as sc)
+(require haply.macros [⌿ ·])
 ```
 
 ## Square, then reverse last
@@ -61,8 +62,19 @@ Elementwise add of two tensors can stay `(+ t u)` — that is Python/Hy
 `+`, which already works on tensors. Use `sc.+` when you mean the Haply
 glyph (conjugate, fold, or passing the function as a value).
 
-## Not yet
+## Reduce a product; matrix product
 
-A reduction such as Dyalog `+⌿ A × B` needs Phase 3
-`(require haply.macros [⌿])` and is not available. Until then, use
-`torch.sum` / `torch.matmul` beside Haply glyphs.
+Dyalog sketches `+⌿ A × B` and `A +.× B`:
+
+```hy
+(setv A (torch.tensor [[1 2] [3 4]] :dtype torch.float32)
+      B A)
+(⌿ + (× A B))          ; sum of squares per column
+(· + × A B)            ; matmul
+```
+
+## Iota, then take
+
+```hy
+(↑ 3 (⍳ 8))            ; [0 1 2]
+```

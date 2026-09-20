@@ -11,9 +11,9 @@ Prose here is English.
 
 ## Status
 
-Phases 0–2 are available on `torch.Tensor`. NumPy and a Python-first
-import surface are not shipped. Operators (`⌿`, `·`, …) and search
-(`⍳`, `∊`, …) are Phase 3 — do not `require haply.macros`.
+Phases 0–3 are available on `torch.Tensor`. NumPy and a Python-first
+import surface are not shipped. Operators are macros:
+`(require haply.macros [⌿ · outer …])`.
 
 ## What Haply is
 
@@ -43,7 +43,8 @@ nix develop
 Select the glyphs you need. Do not star-import.
 
 ```hy
-(import haply [⍴ × ÷ ⌽ ++])
+(import haply [⍴ × ÷ ⌽ ++ ⍳])
+(require haply.macros [⌿ · outer])
 ```
 
 Hy macros and functions do **not** share a namespace. After
@@ -69,6 +70,7 @@ ordinary calls after `import`.
 | `(g Y)` | monadic |
 | `(g X Y)` | dyadic |
 | `(g A B C)` | fold, only for `+` `×` `⌊` `⌈` `∧` `∨` |
+| `(op f Y)` / `(op f X Y)` | operator macro after `require haply.macros` |
 
 No APL infix. No axis bracket. Wrong arity raises `TypeError`.
 
@@ -87,8 +89,9 @@ These Dyalog characters are **not** Haply names.
 | `,` | `++` | awkward as a Hy symbol |
 | `~` | `≁` | bitwise-not confusion |
 | `\|` | `\|\|` | reserved by the host |
-| `.` | `·` | attribute access (operator, Phase 3) |
-| `/` `\` | `⌿_` `⍀_` | Hy division; last-axis slash (Phase 3) |
+| `.` | `·` | attribute access (inner product) |
+| `/` `\` | `⌿_` `⍀_` | Hy division; last-axis slash |
+| `∘.` | `outer` | Hy cannot parse `∘.` |
 
 ## Pages
 
@@ -96,13 +99,15 @@ These Dyalog characters are **not** Haply names.
 | --- | --- |
 | [scalars.md](scalars.md) | Arithmetic, compare, logic, circular, factorial |
 | [structure.md](structure.md) | Shape, ravel, reverse, take/drop, match, tally |
+| [search.md](search.md) | Iota, where, membership, unique, grade, index |
+| [operators.md](operators.md) | Reduce, scan, replicate, commute, inner/outer, each |
 | [recipes.md](recipes.md) | Short programs that run today |
 | [ai.md](ai.md) | Compact sheet for assistants |
 
 ## Not in this manual yet
 
-- Reduce, scan, inner/outer product, trains
-- Iota, where, membership, grade, index
+- Trains and composition (`fork` `∘` `⍤` `⍥` `⍛`)
+- Expand (`⍀` with an array operand)
 - NumPy backend
 - English aliases (glyphs are the names)
 - Runtime `__doc__` on every export

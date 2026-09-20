@@ -158,7 +158,7 @@ Index origin is 0 (decision 28). Translate Dyalog examples accordingly.
 | Id | Dyalog | Haply | Monadic Dyalog | Dyadic Dyalog | Haply intent | Phase | Status |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | G036 | `⍳` | `⍳` | Index generator | Index of | Monadic: `arange` / `meshgrid` for a shape vector. Dyadic: first index of each `Y` in `X` along the search axis; not-found sentinel is `-1` or `n` (working default: `n`, length of the search vector — closer to Dyalog’s `⎕IO+≢X` after origin 0). | 3 | adapt |
-| G037 | `⍸` | `⍸` | Where | Interval index | Monadic: indices of truthy values (`nonzero`). Dyadic: interval / bucket index. | 3 | implement |
+| G037 | `⍸` | `⍸` | Where | Interval index | Monadic: indices of truthy values (`nonzero`). Dyadic: `torch.bucketize` of `Y` into sorted `X` (left / insertion index, 0-based). | 3 | implement |
 | G038 | `∊` | `∊` | Enlist | Membership | **Monadic enlist** becomes flatten (same as `++` on a simple tensor) or is dropped as redundant. Dyadic: `isin`. | 3 | adapt |
 | G039 | `⍷` | `⍷` | — | Find | Boolean mask of occurrences of array `X` as a sub-array of `Y`. | 4 | later |
 | G040 | `∪` | `∪` | Unique | Union | Monadic: unique values in ravel order of first occurrence. Dyadic union waits on how “set” we want tensors to be (working: unique of catenated ravels). | 3 | adapt |
@@ -222,10 +222,10 @@ Full specification: [operators.md](operators.md).
 | G059 | `⌿` | `⌿` | Reduce first; n-wise reduce first | 3 | implement |
 | G060 | `\` | `⍀_` | Scan last | 3 | implement |
 | G061 | `⍀` | `⍀` | Scan first | 3 | implement |
-| G062 | `¨` | `¨` | Each | 3 | undecided (42) |
+| G062 | `¨` | `¨` | Each | 3 | implement (42 default) |
 | G063 | `⍨` | `⍨` | Commute / selfie / constant | 3 | implement |
 | G064 | `.` | `·` | Inner product | 3 | implement |
-| G065 | `∘.` | `∘.` | Outer product | 3 | implement |
+| G065 | `∘.` | `outer` | Outer product | 3 | implement |
 | G066 | `∘` | `∘` | Beside (jot); function combination | 5 | implement |
 | G067 | `⍤` | `⍤` | Atop (function operand); rank (array operand) | 5 | implement |
 | G068 | `⍥` | `⍥` | Over | 5 | implement |
@@ -296,7 +296,7 @@ Build these names. This is the concrete v1-or-specified set.
 
 ### Phase 3 — search and operators
 
-`⍳` `⍸` `∊` `∪` `∩` `⍋` `⍒` `⌷` `⊃` `⌿` `⌿_` `⍀` `⍀_` `⍨` `·` `∘.` `¨` (if 42)
+`⍳` `⍸` `∊` `∪` `∩` `⍋` `⍒` `⌷` `⊃` `⌿` `⌿_` `⍀` `⍀_` `⍨` `·` `outer` `¨`
 
 ### Phase 4 — remaining functions
 

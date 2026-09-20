@@ -199,7 +199,7 @@
 
 (defn test-not-error []
   (with [(pytest.raises TypeError)]
-    (≁ (torch.tensor [True]) (torch.tensor [False]))))
+    (≁)))
 
 ;; --- G022 ∧ / G023 ∨ ------------------------------------------------------
 
