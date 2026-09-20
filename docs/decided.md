@@ -427,3 +427,45 @@ exports. Hy macros such as `and` `or` `if` are not shadowed (`∧` `∨`).
 
 Rejected: B (primitives as macros) and C (leave a compiler hook open in
 the decision). Inlining later does not require reversing A.
+
+---
+
+## 50. In-place operations
+
+Chosen 2026-09-20.
+
+No in-place Haply glyphs. Haply does not export `+=`, `add_`, or any
+other mutating form. Users who want mutation call backend methods
+themselves (`tensor.add_`, `copy_`, …).
+
+Haply functions return a result; they do not write through an argument.
+This avoids aliasing surprises and matches the low-cost, library-not-fork
+rules (decisions 8 and 10).
+
+---
+
+## 60. Shared glyphs for function vs operator
+
+Chosen 2026-09-20: option A.
+
+Keep the Dyalog overload on the first-axis glyphs and their `_` last-axis
+forms. The same head is replicate or expand when the operand is an
+array, and reduce or scan when the operand is a function:
+
+```hy
+(⌿ mask A)    ; replicate along axis 0
+(⌿ + A)       ; reduce + along axis 0
+(⌿_ mask A)   ; replicate last
+(⌿_ + A)      ; reduce last
+(⍀ mask A)    ; expand first (when that glyph ships)
+(⍀ + A)       ; scan first
+```
+
+The macro inspects the operand: a known function name or a callable is
+the operator reading; an array value is the function reading. Prefer
+expansion-time inspection; fall back to runtime if the operand is not
+obvious.
+
+Haply still does not export `/` or `\` (decisions 15 and 20).
+
+Rejected: B (split replicate to another name) and C (the other split).

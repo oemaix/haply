@@ -375,17 +375,6 @@ later.
 
 ---
 
-## 50. In-place operations
-
-**Question.** Should Haply expose in-place forms (`+=`, `add_`)?
-
-**Working default.** No in-place Haply glyphs in v1. Users call backend
-in-place methods themselves.
-
-**Impact.** API surface, aliasing bugs.
-
----
-
 ## 51. Version pins
 
 **Question.** Which Hy, Python, PyTorch, and NumPy versions are supported?
@@ -447,21 +436,3 @@ almost always 0 or 1.
 else `1`. Not `numel`.
 
 **Impact.** `≢`, reductions over major cells.
-
----
-
-## 60. Shared glyphs for function vs operator
-
-**Question.** In Dyalog, `/` is both replicate (function) and reduce
-(operator). Haply already split `/` away. Do `⌿` / `⌿_` stay overloaded
-(function when the “operand” is an array, operator when it is a function)?
-
-**Options.**
-
-- A. Keep Dyalog overload: `(⌿ mask A)` replicate; `(⌿ + A)` reduce.
-- B. Split: `⌿` reduce only; `rep` / `⌿*` or similar for replicate.
-- C. Split the other way.
-
-**Working default.** A, using macro head inspection (name vs value).
-
-**Impact.** Macro implementation complexity, error messages.

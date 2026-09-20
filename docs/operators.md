@@ -73,7 +73,7 @@ tests pin it down in Phase 3; otherwise implement positive `n` first.
 | Dyalog | `X/Y`, `X⌿Y` |
 | Haply | `(⌿ X Y)`, `(⌿_ X Y)` when `X` is an array |
 | Phase | 3 |
-| Status | implement (decision 60 default) |
+| Status | implement (decision 60) |
 
 **Intent.** If `X` is boolean, compress (keep along the axis). If `X` is
 integer, repeat each slice `X[i]` times (negative integers are an error in

@@ -204,7 +204,7 @@ Random, find, matrix divide, encode/decode.
 - `⎕` system space.
 - An APL parser.
 - A custom tensor class.
-- In-place glyphs (decision 50 default).
+- In-place glyphs (decision 50).
 - A tacit parser for juxtaposition.
 
 ## Performance budget

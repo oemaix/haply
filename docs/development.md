@@ -117,5 +117,3 @@ identifiers.
 ## Out of scope until decided
 
 - Python-first API (item 22)
-- GPU policy beyond “don’t move devices” (item 49)
-- In-place glyphs (item 50)
