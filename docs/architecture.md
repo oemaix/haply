@@ -9,8 +9,7 @@ closing that item.
 - Hy-first public API of glyphs and operator macros.
 - Thin dispatch over `torch` and `numpy`.
 - No Haply array type.
-- Macros for operators and trains; functions for primitives (decision 38
-  default).
+- Macros for operators and trains; functions for primitives (decision 38).
 - Tests that pin **Haply intent**, not Dyalog identity.
 
 ## Proposed tree
@@ -80,11 +79,14 @@ working default: both are required in the Nix shell.
 
 ### Routing a dyadic function
 
+Phase 1 implements the PyTorch branch only (item 21). The later steps are
+the intended shape of dispatch, not Phase 1 work.
+
 1. Count arguments → monadic or dyadic (or variadic, decision 37).
 2. Read backends of the arguments.
 3. Same backend → call that kernel.
-4. Mixed backends → error in Phase 1 (do not silently promote).
-5. Python + Python → host operator (`+`, `abs`, …).
+4. Mixed backends → error (do not silently promote).
+5. Python + Python → host operator (`+`, `abs`, …), when that path exists.
 6. Python scalar + tensor → let the backend broadcast the scalar if it
    already does; do not first convert the tensor to a list.
 
@@ -137,7 +139,7 @@ Trains expand to nested calls of existing primitives:
 ## Errors
 
 Phase 1: raise `TypeError`, `ValueError`, `IndexError`, or the backend
-exception. No `DOMAIN ERROR` type (decision 40 default).
+exception. No `DOMAIN ERROR` type (decision 40).
 
 ## Implementation phases
 
@@ -146,7 +148,8 @@ exception. No `DOMAIN ERROR` type (decision 40 default).
 - `flake.nix` with Hy, Python, PyTorch, NumPy, pytest (or Hy’s test
   runner), and `uv`.
 - Package imports.
-- One dispatch test: Python `(+ 1 2)` and tensor `(+ t t)` both work.
+- One dispatch test: tensor `(+ t t)` works. Python `(+ 1 2)` waits on
+  item 21.
 - No glyph soup yet.
 
 ### Phase 1 — scalar core
@@ -156,7 +159,8 @@ Implement the Phase 1 checklist in [glyphs.md](glyphs.md) section 12.
 Done when:
 
 - arity dispatch works;
-- Python / NumPy / PyTorch paths exist for `+` and `⍴`;
+- a PyTorch path exists for `+` and `⍴` (item 21: Phase 1 is PyTorch
+  only; NumPy and Python natives wait);
 - broadcasting follows the backend;
 - Hy programs that do not import Haply are unaffected.
 
@@ -166,7 +170,7 @@ Done when:
 `≠` `○` `!`.
 
 Done when reshape, reverse, and transpose are tested on 1-d, 2-d, and
-3-d tensors for both backends.
+3-d PyTorch tensors. Repeat on NumPy when item 21 adds that backend.
 
 ### Phase 3 — operators and search
 

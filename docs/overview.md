@@ -83,6 +83,8 @@ a native Python value). APL nested arrays and boxes are dropped.
 4. Operators and trains are macros.
 5. Existing Hy, NumPy, and PyTorch behaviour must remain usable.
 6. Abstraction cost stays low: prefer sugar over copies and wrappers.
+7. Haply stays coherent with itself even when that differs from APL.
+8. Implement PyTorch first, then NumPy, then Python natives.
 
 The binding rules are in [design-principles.md](design-principles.md).
 

@@ -51,8 +51,10 @@ to implement.
 | `.` | Hy attribute access | `·` | 23 |
 | `¯` | Hy already has `-` | `-` | 14 |
 
-Hy names that Haply *may* export, with opt-in shadowing (decision 53
-default): `+`, `-`, `<`, `>`, `<=` is **not** used; Haply uses `≤` and `≥`.
+Hy names that Haply *may* export, with opt-in shadowing (decision 53):
+`+`, `-`, `<`, `>`. `<=` is **not** used; Haply uses `≤` and `≥`.
+English aliases, if any, follow decision 39 (hard-to-type glyphs only)
+and are listed in this catalog when named.
 
 ---
 
@@ -62,15 +64,15 @@ Elementwise. Broadcasting is the backend’s. No APL conformability.
 
 | Id | Dyalog | Haply | Monadic Dyalog | Dyadic Dyalog | Haply intent | Phase | Status |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| G001 | `+` | `+` | Conjugate | Plus | Monadic: conjugate on complex values (decision 31), identity on reals. Dyadic: addition. Variadic fold allowed under decision 37 default. | 1 | implement |
+| G001 | `+` | `+` | Conjugate | Plus | Monadic: conjugate on complex values (decision 31), identity on reals. Dyadic: addition. Variadic fold (decision 37). | 1 | implement |
 | G002 | `-` | `-` | Negate | Minus | Negation; subtraction. Negative literals use Hy `-`. No `¯`. | 1 | implement |
-| G003 | `×` | `×` | Direction (signum) | Times | Signum (`sign` / `np.sign`); multiplication. | 1 | implement |
+| G003 | `×` | `×` | Direction (signum) | Times | Signum (`sign` / `np.sign`); multiplication. Variadic fold (decision 37). | 1 | implement |
 | G004 | `÷` | `÷` | Reciprocal | Divide | `1/x`; true division. Do not export Hy `/` as divide. | 1 | implement |
 | G005 | `*` | `**` | Exponential | Power | Monadic: `exp`. Dyadic: `x ** y`. | 1 | implement |
 | G006 | `⍟` | `⍟` | Natural log | Logarithm | Monadic: `ln`. Dyadic: log of `Y` in base `X` (`log(Y)/log(X)`). | 1 | implement |
 | G007 | `|` | `||` | Magnitude | Residue | Haply `||` is both valences (decision 24). Residue follows Dyalog sign convention *if* easy on the backend, otherwise document the backend `remainder`/`fmod` choice. | 1 | adapt |
-| G008 | `⌊` | `⌊` | Floor | Minimum | Floor; elementwise min. | 1 | implement |
-| G009 | `⌈` | `⌈` | Ceiling | Maximum | Ceiling; elementwise max. | 1 | implement |
+| G008 | `⌊` | `⌊` | Floor | Minimum | Floor; elementwise min. Variadic fold (decision 37). | 1 | implement |
+| G009 | `⌈` | `⌈` | Ceiling | Maximum | Ceiling; elementwise max. Variadic fold (decision 37). | 1 | implement |
 | G010 | `○` | `○` | π times | Circular | Monadic: `π * Y`. Dyadic: circular table (extent still decision 47). Complex-valued inputs are in scope (decision 31). | 2 | adapt |
 | G011 | `!` | `!` | Factorial | Binomial | `gamma(Y+1)`; binomial via gammaln or an integer path. | 2 | implement |
 | G012 | `?` | `?` | Roll | Deal | Monadic: random integers in `[0, n)` (decision 28). Dyadic: sample without replacement. Backend RNG is the host RNG. | 4 | adapt |
@@ -116,8 +118,8 @@ Comparisons are exact until decision 29 says otherwise.
 | Id | Dyalog | Haply | Monadic Dyalog | Dyadic Dyalog | Haply intent | Phase | Status |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | G021 | `~` | `≁` | Not | Without | Monadic: logical not. Dyadic: keep values of `X` that are not in `Y` (ravel membership), tensor analogue of without. | 1 / 3 | adapt |
-| G022 | `∧` | `∧` | — | And / LCM | Boolean and; integer LCM if decision 46 default holds. | 1 | adapt |
-| G023 | `∨` | `∨` | — | Or / GCD | Boolean or; integer GCD if decision 46 default holds. | 1 | adapt |
+| G022 | `∧` | `∧` | — | And / LCM | Boolean and; integer LCM (decision 46). Variadic fold (decision 37). | 1 | adapt |
+| G023 | `∨` | `∨` | — | Or / GCD | Boolean or; integer GCD (decision 46). Variadic fold (decision 37). | 1 | adapt |
 | G024 | `⍲` | `⍲` | — | Nand | `not (X and Y)` | 1 | implement |
 | G025 | `⍱` | `⍱` | — | Nor | `not (X or Y)` | 1 | implement |
 
@@ -161,8 +163,8 @@ Index origin is 0 (decision 28). Translate Dyalog examples accordingly.
 | G039 | `⍷` | `⍷` | — | Find | Boolean mask of occurrences of array `X` as a sub-array of `Y`. | 4 | later |
 | G040 | `∪` | `∪` | Unique | Union | Monadic: unique values in ravel order of first occurrence. Dyadic union waits on how “set” we want tensors to be (working: unique of catenated ravels). | 3 | adapt |
 | G041 | `∩` | `∩` | — | Intersection | Values of `X` that appear in `Y`, stable order from `X`. | 3 | implement |
-| G042 | `⍋` | `⍋` | Grade up | Dyadic grade up | Indices that sort `Y` ascending. Dyadic (alphabet / collation) later; v1 is numeric monadic grade. | 3 | adapt |
-| G043 | `⍒` | `⍒` | Grade down | Dyadic grade down | Same with descending. | 3 | adapt |
+| G042 | `⍋` | `⍋` | Grade up | Dyadic grade up | Indices that sort `Y` ascending. Numeric only (decision 32); no collation alphabet. | 3 | adapt |
+| G043 | `⍒` | `⍒` | Grade down | Dyadic grade down | Same, descending. Numeric only (decision 32). | 3 | adapt |
 | G044 | `⌷` | `⌷` | Materialise | Index | Monadic materialise is identity on a tensor. Dyadic: index by `X` (list of index arrays / integers), 0-based. Prefer mapping to `tensor[…]` / `np.ix_` rather than APL squad idiosyncrasies. | 3 | adapt |
 
 ---
@@ -263,7 +265,7 @@ They are **not** Haply exports.
 | `⍝` | Comment | Hy `;` |
 | `⋄` | Statement separator | Separate Hy forms |
 | `¯` | High minus | Decision 14 |
-| `'` `''` | Character arrays | Decision 26: no Haply binding. Strings stay Hy. Character arrays: 32. |
+| `'` `''` | Character arrays | Decisions 26 and 32: no Haply binding. Strings stay Hy. |
 | `` ` `` | Hy/Python syntax | Decision 26: no Haply binding |
 | `⍺` `⍵` `⍺⍺` `⍵⍵` | Dfn arguments | Hy function parameters |
 | `∇` `∇∇` | Self-reference | Hy recursion |

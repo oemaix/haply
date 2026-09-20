@@ -311,7 +311,7 @@ array wings.
    over the chosen cells.
 3. Do not silently change the user’s function into a vectorised form
    unless you can prove it is elementwise (Haply scalar primitives).
-4. Preserve backend and device (decisions 9, 49).
+4. Preserve backend and device (decisions 9 and 49).
 5. The derived call remains a Hy expression. Users should be able to nest:
 
 ```hy

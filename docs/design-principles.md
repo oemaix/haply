@@ -48,6 +48,12 @@ built-in sequences are allowed where they are the natural host value.
 APL nested arrays (boxes) are dropped. Rank is tensor rank. Cells are tensor
 slices along leading or trailing dimensions, not enclosed arrays.
 
+The cheap host analogue of a box is **another dimension**, not a nest.
+`stack`, `unbind`, `unsqueeze`, and `flatten` stand in for mix, split,
+enclose, and enlist where the catalog keeps a glyph. NumPy object arrays
+and `torch.nested` are ragged containers, not Dyalog arrays, and are not
+the Haply model. See [undecided 43](undecided.md#43-nested-adjacent-primitives).
+
 ## 4. Broadcasting over conformability
 
 Dyalog has strict conformability and a specific scalar-extension rule. Haply
@@ -71,9 +77,8 @@ callables at runtime. The macro should expand to straight PyTorch or NumPy
 calls wherever that is possible, so the abstraction can stay close to zero
 cost.
 
-Primitive scalar and mixed *functions* may be ordinary Hy/Python functions.
-Whether some of them should also be macros is open; see
-[undecided.md](undecided.md#38-function-vs-macro-for-scalar-primitives).
+Primitive scalar and mixed *functions* are ordinary Hy/Python functions
+(decision 38). They are not macros.
 
 ## 6. Do not break Hy, NumPy, or PyTorch
 
@@ -102,9 +107,10 @@ honest:
 Do not silently lift a Python list to a tensor, or a NumPy array to a torch
 tensor, unless a later decision defines mixed-backend promotion.
 
-How far this rule extends (Python-only usage, mixed tensor arguments, device
-moves) is still open; see [undecided.md](undecided.md#21-backend-set)
-and [undecided.md](undecided.md#22-python-import-surface).
+How far this rule extends (Python-only usage, mixed tensor arguments) is
+still open; see [undecided.md](undecided.md#21-backend-set) and
+[undecided.md](undecided.md#22-python-import-surface). Device and dtype
+policy is decision 49.
 
 ## 8. Low-cost abstraction
 
@@ -117,6 +123,10 @@ heavy runtime interpreter for trains. Prefer:
 - compile-time macro expansion;
 - thin wrappers that only dispatch on type and arity.
 
+A glyph that needs a Python loop over elements, an object-array walk, or
+a box runtime is not accepted by default. It must earn its place against
+this rule, or be adapted to a kernel, deferred, or dropped.
+
 ## 9. Dyalog as reference, Haply as intent
 
 When a glyph is implemented, the Dyalog name and valence are the starting
@@ -126,7 +136,25 @@ Impossible or undesirable Dyalog behaviour (nested prototypes, `⎕IO`,
 `⎕ML`, session I/O, I-beams, …) is adapted or dropped, never silently
 approximated.
 
+Haply must stay coherent with itself even when that differs from APL,
+Hy, PyTorch, NumPy, or Python lists. Those hosts already disagree with
+each other; copying any one of them at the cost of the tensor model is
+not a goal.
+
+APL session and runtime machinery (`⍎`, `⍕`, `⌶`, `⎕`, spawn, system
+space) is dropped (decision 44). Character arrays and string processing
+are dropped (decision 32); use Hy and Python for that work.
+
 ## 10. Development environment
 
 Build and test happen in Nix. The repo root should contain `flake.nix`
 and `flake.lock`. Details are in [development.md](development.md).
+
+## 11. Implementation order
+
+PyTorch is the first implementation target. NumPy follows when the
+PyTorch path is stable. Python natives (scalars, then lists) come last,
+and only where they stay honest under decision 9.
+
+Phase 1 may ship PyTorch tensors only. Item 21 stays open for whether
+every glyph must eventually accept all three backends.

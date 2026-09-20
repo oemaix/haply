@@ -260,3 +260,170 @@ name `∘.`, not a special case of jot.
 Option C would have overloaded `∘` so one head did both beside and outer
 product (for example by treating a missing second function, or a lone
 dot, as outer). That collides with jot and is rejected.
+
+---
+
+## 39. Keyword aliases
+
+Chosen 2026-09-20: option C.
+
+Glyphs stay the primary names. Official English aliases exist only where
+a glyph is hard to type, or where a forced ASCII form already exists
+(`**`, `==`, `++`, `||`). Aliases are a didactic layer, not a second
+catalog. Spellings are added in [glyphs.md](glyphs.md) when they are
+named; they are not invented outside the catalog.
+
+Phase 1 may ship glyphs first and attach aliases later. Do not rename a
+glyph to English inside the implementation.
+
+Rejected: A (no teaching names) and B (an English name for every glyph).
+
+---
+
+## 40. Error model
+
+Chosen 2026-09-20: option A.
+
+Haply raises native Python and backend exceptions (`TypeError`,
+`ValueError`, `IndexError`, or whatever PyTorch or NumPy raise). There is
+no Haply exception hierarchy and no Dyalog-style `DOMAIN ERROR` types.
+
+---
+
+## 46. `∧` / `∨` as LCM / GCD
+
+Chosen 2026-09-20: option B.
+
+Both readings: AND / OR on booleans, LCM / GCD on integers. On `{0,1}`
+integers the two coincide (`lcm` is AND, `gcd` is OR), which is why
+Dyalog unified them.
+
+Map boolean dtypes to `logical_and` / `logical_or` (or equivalent) and
+integer dtypes to the backend `lcm` / `gcd`. Floats are a domain error
+(`ValueError`, or the backend’s error). Sign, empty, and `gcd(0, 0)`
+follow the backend, not a reconstructed Dyalog table.
+
+---
+
+## 49. Device and dtype policy
+
+Chosen 2026-09-20.
+
+Do not move devices. Follow the backend’s dtype promotion. If devices
+differ, let PyTorch raise. Haply does not insert `.to(device)` or a
+private promotion table.
+
+---
+
+## 32. Character and string arrays
+
+Chosen 2026-09-20: option A.
+
+Drop character arrays. Strings stay ordinary Hy/Python values and are
+not Haply arrays. No character dtype, no `str` treated as a vector of
+cells, and no collation alphabet for grade.
+
+`⍕` remains dropped (decision 44). Find, membership, unique, and grade
+are numeric (or boolean) tensor operations. Use Hy and Python for text.
+
+---
+
+## 37. Variadic scalar functions
+
+Chosen 2026-09-20: option B.
+
+Hy-style variadic folds for associative scalar ops. Everything else
+stays strict APL valence: one or two arguments only.
+
+The associative set is:
+
+| Glyph | Fold | Identity (empty reduce, item 41) |
+| --- | --- | --- |
+| `+` | sum | `0` |
+| `×` | product | `1` |
+| `⌈` | maximum | −∞ / dtype min |
+| `⌊` | minimum | +∞ / dtype max |
+| `∧` | AND / LCM (46) | `1` |
+| `∨` | OR / GCD (46) | `0` |
+
+A later associative scalar may join this list only by a catalog edit.
+Boolean `≠` (XOR) and `==` (XNOR) are associative in a narrow sense but
+are not variadic: monadic `≠` is unique mask.
+
+Not associative, therefore never variadic: `-` `÷` `**` `⍟` `||`
+(residue) `<` `≤` `==` `≥` `>` `⍲` `⍱` and all mixed functions.
+
+Rejected: A (no folds) and C (freeze the list at these six with no
+later additions).
+
+---
+
+## 53. Import and shadowing policy
+
+Chosen 2026-09-20: option A.
+
+Recommend selective import. Shadowing is opt-in and must preserve
+Python-scalar behaviour (decision 9). Modules that do not import a
+Haply name keep Hy’s meaning (decision 8).
+
+**Never export** (already closed by 14–19, 23, 24):
+
+| Hy / host | Why it stays with Hy | Haply name |
+| --- | --- | --- |
+| `*` | multiply | `**` (16) |
+| `/` | divide | `÷` and `⌿_` (15) |
+| `=` | Hy equality / name | `==` (17) |
+| `\|` | reserved | `\|\|` (24) |
+| `.` | attribute access | `·` (23) |
+| `,` | awkward as a Hy symbol | `++` (18) |
+| `~` | bitwise-not confusion | `≁` (19) |
+| `^` | Hy XOR / host name | `∧` (25) |
+| `¯` | Hy already has `-` | `-` (14) |
+
+**May export** (only after `import haply`):
+
+| Name | Hy meaning | Haply meaning |
+| --- | --- | --- |
+| `+` | variadic host add | conjugate / add (31, 37) |
+| `-` | host sub / negate | negate / sub |
+| `<` `>` | host compare | elementwise compare |
+| `**` | host power | exp / power (16) |
+
+Not shadowed: `<=` `>=` (Haply uses `≤` `≥`), `and` `or` `not` (`∧` `∨`
+`≁`), `%` (`||`), `in` (`∊`).
+
+Rejected: B (never export `+` `-` `<` `>`) and C (a `haply.strict` /
+`haply.hy` split).
+
+---
+
+## 38. Function vs macro for scalar primitives
+
+Chosen 2026-09-20: option A.
+
+Primitives are functions. Only operators and trains are macros
+(decision 7). A function name is enough for `(⌿ + A)`: the operator
+macro pattern-matches the symbol and emits a kernel.
+
+**Same situation as `+`** — Hy already owns the name (decision 53):
+
+| Name | Hy | Haply extra |
+| --- | --- | --- |
+| `+` | variadic add; monadic identity | monadic conjugate (31); tensor add |
+| `**` | power | monadic `exp` (16) |
+| `-` | negate / sub | tensor elementwise; monadic already matches Hy |
+| `<` `>` | host compare | tensor elementwise; no monadic APL meaning |
+
+`**` is the closest twin of `+`: the monadic meaning changes. `-` `<` `>`
+are milder.
+
+**Same operand need, different names.** Any primitive used as an operator
+operand must stay a resolvable function: `×` `÷` `⌈` `⌊` `∧` `∨` `==`
+and the rest. `(⌿ × A)` and `(· + × X Y)` would be painful if those
+heads were macros.
+
+**Not this situation.** `*` `/` `=` `|` `.` `,` `~` are never Haply
+exports. Hy macros such as `and` `or` `if` are not shadowed (`∧` `∨`).
+
+Rejected: B (primitives as macros) and C (leave a compiler hook open in
+the decision). Inlining later does not require reversing A.

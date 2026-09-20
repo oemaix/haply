@@ -24,6 +24,9 @@ PyTorch tensors?
 **Context.** Decision 9 says “preserve the backend you are given”. The
 compatibility note still asks whether all three are in scope.
 
+Left open on 2026-09-20. Phase 1 implements **PyTorch tensors only**.
+Whether every glyph must later accept all three remains the question.
+
 **Options.**
 
 - A. All three, for every implemented glyph.
@@ -31,8 +34,16 @@ compatibility note still asks whether all three are in scope.
   accepts them.
 - C. PyTorch first; NumPy later; Python natives only as a convenience.
 
-**Working default.** A for scalar arithmetic; C is acceptable for Phase 1
-if a glyph is tensor-only and documented as such.
+**Working default.** C for shipping order. Priority if others land:
+PyTorch, then NumPy, then Python natives (scalars before lists). Option A
+is not a Phase 1 requirement.
+
+**Notes.** Python scalars are not a third tensor backend. A `3` has no
+shape, device, or kernel; a Python list is a sequence, not an ndarray.
+Implementing a glyph on lists means reject, walk in Python (slow, and it
+starts to look like nested APL), or lift to a tensor (against decision 9
+unless the lift is documented). A Python number next to a tensor is
+usually free: the backend already broadcasts it.
 
 **Impact.** Dispatch tables, tests, and mixed-type errors.
 
@@ -43,12 +54,28 @@ if a glyph is tensor-only and documented as such.
 **Question.** Haply is a Hy library. Should plain Python `import haply` be
 supported, documented, or explicitly rejected?
 
+Hy compiles to Python, so `import haply` can exist as a side effect of
+packaging. That is not the same as supporting a Python API.
+
 **Options.**
 
 - A. Hy is the only supported surface. Python import may exist as an
   implementation detail but is not a product.
 - B. Official Python API with the same glyphs as Unicode identifiers.
 - C. Official Python API with ASCII aliases only.
+
+**A vs B.** Implementation in Hy does **not** automatically give Python
+users the same product.
+
+| | A (Hy only) | B (official Python, Unicode glyphs) |
+| --- | --- | --- |
+| Functions such as `⍴` `×` `∧` | Hy names | Also legal Python identifiers |
+| `+` `-` `<` `>` | Hy names; opt-in shadow | **Not** legal Python identifiers; need `getattr` or a mapping |
+| Operators / trains (`⌿`, `fork`, `∘`) | Hy `require` macros | Macros do not run from Python; B needs function fallbacks or drops them |
+| Docs and tests | Hy examples | A second surface to specify and test |
+
+C is B with ASCII names instead of Unicode. Decision 39 already limits
+English aliases; C would make those aliases the Python product.
 
 **Working default.** A. Implement in Hy; do not advertise a Python API yet.
 
@@ -60,11 +87,25 @@ supported, documented, or explicitly rejected?
 
 **Question.** Dyalog uses `⎕CT`. Haply has no system variables.
 
+Left open on 2026-09-20. None of A–C is a Dyalog equivalent: Dyalog’s
+tolerance is a session-global `⎕CT` that affects `=` `≠` `<` `≤` `≥` `>`
+and, through those, match, membership, unique, and index-of.
+
 **Options.**
 
 - A. Exact comparison only.
 - B. Explicit tolerant functions (`≈`, `match-at`, …).
 - C. Optional keyword on `==` / `≡`.
+
+**Notes.** B and C as written cover equal and match (and the not-forms).
+They do not reconstruct tolerant `<` `≤` `≥` `>`. Full `⎕CT` on order
+comparisons is not a PyTorch primitive; it is a scalar formula on top of
+`abs` / `max` and is a real cost if applied to every compare.
+
+The honest tensor analogue of *tolerant equality* is `torch.isclose` /
+`torch.allclose` (and the NumPy pair). Exact `torch.eq` / `torch.equal`
+is the analogue of A. That part is easy. A hidden global like `⎕CT` is
+neither easy nor wanted (no system variables).
 
 **Working default.** A.
 
@@ -86,22 +127,6 @@ supported, documented, or explicitly rejected?
 **Working default.** A.
 
 **Impact.** All constructors: `⍳`, `?`, `⍴` when building from Python data.
-
----
-
-## 32. Character and string arrays
-
-**Question.** Dyalog is rich in character arrays. Tensors are numeric.
-
-**Options.**
-
-- A. Drop character arrays. Use Python strings outside Haply.
-- B. Support NumPy/PyTorch string or bytes dtypes where they exist.
-- C. Treat Python `str` as a vector of characters.
-
-**Working default.** A for v1.
-
-**Impact.** `⍕`, find, membership, grade on characters.
 
 ---
 
@@ -163,6 +188,26 @@ return `dtype=torch.bool`.
 **Question.** Is a Python `3`, a 0-d tensor, and a 1-element vector the
 same in Haply?
 
+They are three different host values. APL has one “scalar” (empty shape).
+PyTorch has two tensor shapes that people casually call scalar.
+
+```hy
+(setv py 3)                       ; int, no .shape
+(setv s  (torch.tensor 3))        ; 0-d, shape (), ndim 0
+(setv v  (torch.tensor [3]))      ; 1-d, shape (1,), ndim 1
+```
+
+| Form | `type` | `shape` / `size` | `(⍴ ·)` under typical tensor intent | `(≢ ·)` tally |
+| --- | --- | --- | --- | --- |
+| Python `3` | `int` | none | not a tensor; error, or no shape | not specified |
+| `torch.tensor(3)` | 0-d tensor | `()` | empty 1-d shape vector | `1` |
+| `torch.tensor([3])` | vector | `(1,)` | `[1]` | `1` |
+
+Broadcasting also differs: `s` acts like a true scalar against any
+shape; `v` is a length-1 vector and only lines up with a trailing `1` or
+an equal length. Reductions: `s.sum()` stays 0-d; `v.sum()` becomes 0-d.
+Indexing: `s` cannot be indexed; `v[0]` is 0-d.
+
 **Options.**
 
 - A. Python scalars stay Python; 0-d tensors stay 0-d.
@@ -172,76 +217,6 @@ same in Haply?
 **Working default.** A, plus C when both arguments are already tensors.
 
 **Impact.** Shape of results, `⍴`, `≢`, reductions.
-
----
-
-## 37. Variadic scalar functions
-
-**Question.** Hy `(+ 1 2 3)` is legal. Dyalog `+` is strictly monadic or
-dyadic.
-
-**Options.**
-
-- A. Strict APL valence: 1 or 2 arguments only.
-- B. Hy-style variadic folds for associative scalar ops.
-- C. Variadic only for `+` `×` `⌈` `⌊` `∧` `∨`.
-
-**Working default.** B for associative arithmetic and logic; A for the
-rest.
-
-**Impact.** Function signatures, tests, documentation examples.
-
----
-
-## 38. Function vs macro for scalar primitives
-
-**Question.** Decision 7 forces macros for operators. Should `+` itself be
-a function or a macro?
-
-**Options.**
-
-- A. Functions. Only operators/trains are macros.
-- B. Macros that inline backend ops.
-- C. Functions with optional compiler helpers later.
-
-**Working default.** A.
-
-**Impact.** `require` vs `import`, inlining, first-class use of `+` as an
-operand: `(⌿ + A)` needs `+` to be a resolvable name.
-
----
-
-## 39. Keyword aliases
-
-**Question.** Should every glyph also have an English name (`shape`,
-`reduce`, `iota`)?
-
-**Options.**
-
-- A. Glyphs only.
-- B. Official aliases for every implemented glyph.
-- C. Aliases only where a glyph is hard to type.
-
-**Working default.** C later; A for Phase 1 (glyphs plus the forced ASCII
-forms `**`, `==`, `++`, `||`).
-
-**Impact.** Public API size, docs, Python surface (item 22).
-
----
-
-## 40. Error model
-
-**Question.** APL domain/length/rank errors vs Python exceptions.
-
-**Options.**
-
-- A. Native Python / backend exceptions only.
-- B. A small Haply exception hierarchy that wraps backend errors.
-- C. Dyalog-like error names.
-
-**Working default.** A.
-
-**Impact.** Tests, user code, macros.
 
 ---
 
@@ -268,6 +243,20 @@ operands.
 
 **Question.** Dyalog `¨` maps over boxes/items. Tensors have no boxes.
 
+**PyTorch / NumPy analogues** (this is also item 43):
+
+| Wanted Each | Host analogue | Cost |
+| --- | --- | --- |
+| Scalar `f` on every element | just call `f` (already elementwise) | one kernel; do not loop |
+| Same `f` on every major cell | `torch.vmap` / `torch.func.vmap` | compiled batch; closest to “each cell” |
+| Split, map, restack | `unbind` + Python map + `stack` | works; Python-level; shapes must agree |
+| Ragged / boxed items | `torch.nested` or a list of tensors | not the Haply model (decision 5) |
+| NumPy object array of arrays | `dtype=object` | slow; rejected |
+
+Dyalog Each is cheap because items are already boxed. On a tensor, Each
+that is not elementwise or `vmap` is a Python loop and fails principle 8
+unless the operand is a user function we cannot vectorise.
+
 **Options.**
 
 - A. Drop `¨` in v1; users write Python/Hy loops or `vmap`.
@@ -286,6 +275,26 @@ function (then prefer a true elementwise call instead of Each).
 **Question.** Mix, split, enclose, disclose, nest, pick, partition, depth,
 enlist: Dyalog needs nested arrays. Some have tensor analogues (`stack`,
 `unbind`, `unsqueeze`, `flatten`).
+
+Boxes are not unique to Dyalog (J boxes, K/Lisp lists), but they are
+almost absent from the tensor stack. The cheap analogue is **another
+dimension**, not a nest. NumPy `dtype=object` and `torch.nested` are
+ragged containers, not Dyalog arrays, and they fail the cost rule.
+
+| Dyalog | Role | Closest host analogue | Haply |
+| --- | --- | --- | --- |
+| `⊂` enclose | add a nest layer | `unsqueeze` / wrap in a list | drop (G048) |
+| `⊆` nest | enclose if simple | none | drop (G049) |
+| `⊃` first / pick | first item; path into boxes | `[0]` / `unbind` / `select` | first cell only (G050) |
+| `↑` mix | nest → higher rank | `torch.stack` | drop monadic (G051) |
+| `↓` split | rank → nest | `unbind` / `split` | drop monadic (G052) |
+| `≡` depth | nest depth | none (`ndim` is rank) | drop monadic (G053) |
+| `∊` enlist | flatten nest | `flatten` / ravel | flatten (G038) |
+| partitioned enclose | group by mask | `split` / groupby | drop |
+| `¨` each | map over items | see item 42 | open |
+
+A Python list of tensors is the honest ragged leftover. It is a host
+value, not a Haply array (decision 4).
 
 **Options.**
 
@@ -330,23 +339,6 @@ equal”.
 
 ---
 
-## 46. `∧` / `∨` as LCM / GCD
-
-**Question.** On Booleans, Dyalog `∧` / `∨` are AND / OR. On integers they
-are LCM / GCD.
-
-**Options.**
-
-- A. Boolean only.
-- B. Full Dyalog (LCM/GCD on integers, AND/OR on 0/1).
-- C. Split names: `∧` boolean, `lcm` / `gcd` separate.
-
-**Working default.** B if both arguments are integral; A if boolean.
-
-**Impact.** Logic vs number theory, tests.
-
----
-
 ## 47. Circular table `○`
 
 **Question.** Dyalog `X○Y` is a large family (trig, hyperbolic, complex
@@ -383,17 +375,6 @@ later.
 
 ---
 
-## 49. Device and dtype policy
-
-**Question.** GPU devices, dtype promotion, mixing CUDA and CPU.
-
-**Working default.** Do not move devices. Follow the backend’s promotion.
-If devices differ, let PyTorch raise.
-
-**Impact.** Every binary function.
-
----
-
 ## 50. In-place operations
 
 **Question.** Should Haply expose in-place forms (`+=`, `add_`)?
@@ -413,26 +394,6 @@ in-place methods themselves.
 versions in [development.md](development.md) once the shell evaluates.
 
 **Impact.** CI, Nix, packaging.
-
----
-
-## 53. Import and shadowing policy
-
-**Question.** `(import haply [+])` shadows Hy `+`. Decision 8 forbids
-breaking Hy, but the design notes show importing `+`.
-
-**Options.**
-
-- A. Recommend selective import. Shadowing is opt-in and must preserve
-  Python-scalar behaviour (decision 9).
-- B. Never export Hy-colliding names; use only APL letters (`×` not a
-  shadowed `*`).
-- C. A `haply.strict` vs `haply.hy` namespace split.
-
-**Working default.** A. `+`, `-`, `<`, `>` may be imported; `*`, `/`, `=`,
-`|`, `.`, `,`, `~` are never Haply exports.
-
-**Impact.** Public names, tutorials, decision 8.
 
 ---
 

@@ -80,13 +80,15 @@ Minimum for each implemented glyph:
 - one broadcast case for scalar dyadics;
 - one error case (wrong arity or impossible shape).
 
-Cover both `torch.Tensor` and `numpy.ndarray` once dispatch exists.
-Python natives at least for `+` `-` `×` `÷` `**` `||`.
+Phase 1 tests `torch.Tensor`. Cover `numpy.ndarray` once that backend
+exists (item 21). Python natives wait on the same item; they are not a
+Phase 1 requirement.
 
 ## Style
 
 - Glyphs are first-class names. Do not rename `⍴` to `rho` in the
-  implementation unless decision 39 says so.
+  implementation. English aliases follow decision 39 and are extra
+  names, not replacements.
 - Keep wrappers thin.
 - Do not mutate input tensors.
 - Do not import Haply names in Hy modules that still need Hy `+` / `=`

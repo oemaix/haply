@@ -48,7 +48,7 @@ Haply implements a **vocabulary**, not an APL machine.
 | Nested boxes | First-class | Dropped |
 | Rank | Array rank | Tensor `ndim` / `.ndim` |
 | Empty arrays | Prototypes and fill elements | Backend empty tensors; no APL prototypes |
-| Characters | Character arrays | Open ([undecided 32](undecided.md#32-character-and-string-arrays)) |
+| Characters | Character arrays | Dropped (decision 32). Strings stay Hy/Python. |
 | Complex | Native complex | In scope where the backend has it (decision 31) |
 
 There is no Haply “box”, no prototype, and no fill element derived from
@@ -66,7 +66,8 @@ Haply uses the broadcasting of the values’ backend:
 - two `torch.Tensor` values → `torch` broadcasting;
 - two `numpy.ndarray` values → `numpy` broadcasting;
 - mixed or Python-native cases follow [undecided 21](undecided.md#21-backend-set)
-  and [undecided 49](undecided.md#49-device-and-dtype-policy).
+  and decision 49 (device and dtype: do not move devices; follow the
+  backend’s promotion).
 
 ## Index origin
 
@@ -119,9 +120,9 @@ rejected or treated as a host sequence, depending on the backend decision.
 
 Dyalog has DOMAIN ERROR, LENGTH ERROR, RANK ERROR, INDEX ERROR, and others.
 
-Working default ([undecided 40](undecided.md#40-error-model)): raise ordinary
-Python exceptions (`TypeError`, `ValueError`, `IndexError`, or the exception
-the backend raises). Do not invent an APL error hierarchy in Phase 1.
+Decision 40: raise ordinary Python exceptions (`TypeError`, `ValueError`,
+`IndexError`, or the exception the backend raises). Do not invent an APL
+error hierarchy.
 
 ## System space
 
