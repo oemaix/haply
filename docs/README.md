@@ -7,6 +7,8 @@ This suite is the official specification for implementation. Code should follow
 these documents. Open questions live in the undecided register and keep their
 numbers when they move to the decided register.
 
+To *use* Haply, start at [`manual/`](../manual/README.md).
+
 ## Read in this order
 
 | Document | Purpose |
@@ -37,6 +39,5 @@ They are not decisions.
 
 ## Status
 
-The project is in the specification stage. No implementation is required to
-exist yet. The architecture and glyph catalog are written so implementation can
-begin with Phase 0 and Phase 1 in [architecture.md](architecture.md).
+Phases 0–2 are implemented for PyTorch. Continue with Phase 3 in
+[architecture.md](architecture.md).

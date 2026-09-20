@@ -8,12 +8,12 @@ Hy. The data model is tensors. The evaluation rule is Lisp prefix
 evaluation, not APL right-to-left.
 
 ```hy
-(import haply [⍴ × +])
-(require haply.macros [⌿])
+(import torch)
+(import haply [⍴ × + ⌽])
 
 (setv A (torch.tensor [[1 2 3] [4 5 6]]))
 (⍴ A)              ; shape
-(⌿ + (× A A))      ; +⌿ A × A  — reduce-plus after times
+(⌽ (× A A))        ; reverse last after times
 ```
 
 The name fuses **Hy** and **APL**. In English, *haply* means “by chance”,
@@ -21,10 +21,12 @@ which is a joke for a deterministic numeric library.
 
 ## Status
 
-The project is specified and ready for implementation. Start with
-[docs/architecture.md](docs/architecture.md) (Phase 0, then Phase 1).
+Phases 0–2 are implemented for `torch.Tensor` (item 21: NumPy waits).
+Next is Phase 3 — operators and search — in
+[docs/architecture.md](docs/architecture.md).
 
-The official specification lives in [`docs/`](docs/README.md).
+The user manual lives in [`manual/`](manual/README.md). The official
+specification lives in [`docs/`](docs/README.md).
 
 ## Design in brief
 
@@ -46,6 +48,15 @@ indexes, no prototypes, reshape that does not recycle, and others). See [docs/se
 [docs/glyphs.md](docs/glyphs.md).
 
 ## Documentation
+
+User book (programmers and assistants *using* Haply):
+
+| Document | Contents |
+| --- | --- |
+| [manual/README.md](manual/README.md) | Install, import, call forms |
+| [manual/ai.md](manual/ai.md) | Compact sheet for assistants |
+
+Specification (people *building* Haply):
 
 | Document | Contents |
 | --- | --- |
@@ -70,8 +81,8 @@ Build and test in Nix. A `flake.nix` at the repository root is required
 nix develop
 ```
 
-Implementation order: Phase 0 scaffolding, then the Phase 1 scalar
-checklist in [docs/glyphs.md](docs/glyphs.md#12-implementation-checklist-what-we-will-build).
+Phases 0–2 are in. Next is the Phase 3 checklist in
+[docs/glyphs.md](docs/glyphs.md#12-implementation-checklist-what-we-will-build).
 
 ## License
 

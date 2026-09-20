@@ -1,0 +1,68 @@
+# Recipes
+
+Programs that run on today’s public API. No operators, no search glyphs.
+
+```hy
+(import torch)
+(import haply [⍴ × ÷ ⌽ ++ ⍪ ↑ ⊖ ≢])
+(import haply.scalar :as sc)
+```
+
+## Square, then reverse last
+
+Dyalog sketch `⌽ A × A` becomes prefix:
+
+```hy
+(setv A (torch.tensor [[1 2 3] [4 5 6]]))
+(⌽ (× A A))
+; [[ 9  4  1]
+;  [36 25 16]]
+```
+
+## Reshape a ravel (no recycle)
+
+```hy
+(setv v (torch.arange 6))
+(⍴ [2 3] v)
+; [[0 1 2]
+;  [3 4 5]]
+```
+
+`(⍴ [2 2] v)` fails: six elements do not fill four. There is no Dyalog
+cycle.
+
+## Glue a column, then take the first row
+
+```hy
+(setv M (torch.tensor [[1 2] [3 4]]))
+(↑ 1 (++ M (torch.tensor [5 6])))
+; [[1 2 5]]
+```
+
+## How many major cells?
+
+```hy
+(≢ (torch.tensor [[1 2 3] [4 5 6]]))   ; 2
+```
+
+`≢` is `shape[0]`, not `numel`.
+
+## Haply plus as a function
+
+Hy owns call-position `+`. Conjugate and a plus-fold use the object:
+
+```hy
+(sc.+ (torch.tensor [1+2j]))           ; [1-2j]
+(sc.+ (torch.tensor [1]) (torch.tensor [2]) (torch.tensor [3]))
+; [6]
+```
+
+Elementwise add of two tensors can stay `(+ t u)` — that is Python/Hy
+`+`, which already works on tensors. Use `sc.+` when you mean the Haply
+glyph (conjugate, fold, or passing the function as a value).
+
+## Not yet
+
+A reduction such as Dyalog `+⌿ A × B` needs Phase 3
+`(require haply.macros [⌿])` and is not available. Until then, use
+`torch.sum` / `torch.matmul` beside Haply glyphs.

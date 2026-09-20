@@ -90,6 +90,7 @@ The binding rules are in [design-principles.md](design-principles.md).
 
 ## Documentation map
 
+- Using Haply: [`manual/`](../manual/README.md)
 - Vocabulary to implement: [glyphs.md](glyphs.md) and [operators.md](operators.md)
 - How to build it: [architecture.md](architecture.md)
 - How to work on it: [development.md](development.md)

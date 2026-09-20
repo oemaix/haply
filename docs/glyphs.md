@@ -107,7 +107,7 @@ Comparisons are exact until decision 29 says otherwise.
 | G015 | `=` | `==` | — | Equal to | Elementwise equality. Not Hy `=`. | 1 | implement |
 | G016 | `≥` | `≥` | — | Greater or equal | Elementwise `>=` | 1 | implement |
 | G017 | `>` | `>` | — | Greater than | Elementwise `>` | 1 | implement |
-| G018 | `≠` | `≠` | Unique mask | Not equal | Dyadic: elementwise `!=`. Monadic: unique mask along the ravel order (decision 45 default). | 2 | implement |
+| G018 | `≠` | `≠` | Unique mask | Not equal | Dyadic: elementwise `!=`. Monadic: first-occurrence mask of raveled values in C-order, **same shape as `Y`** (decision 45 default). Not Dyalog’s major-cell unique mask. | 2 | implement |
 | G019 | `≡` | `≡` | Depth | Match | Dyadic: whole-array equality (`torch.equal` / `np.array_equal`). Monadic depth is dropped by default (decision 56). | 2 | adapt |
 | G020 | `≢` | `≢` | Tally | Not match | Monadic: major-cell count (`shape[0]`, or `1` if scalar). Dyadic: `not match`. | 2 | implement |
 
@@ -132,7 +132,7 @@ These are the core tensor vocabulary.
 | Id | Dyalog | Haply | Monadic Dyalog | Dyadic Dyalog | Haply intent | Phase | Status |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | G026 | `⍴` | `⍴` | Shape | Reshape | Monadic: shape vector (1-d tensor or tuple — Phase 0 should pick one and stay with it; working default: 1-d tensor of the same backend). Dyadic: reshape `Y` to shape `X`, row-major, cycling `Y` if needed *only if* we choose Dyalog reshape; working default: **no cycle**, size must match, like `view`/`reshape`. Document this as a deviation. | 1 | adapt |
-| G027 | `,` | `++` | Ravel | Catenate / laminate | Monadic: flatten to 1-d (C order). Dyadic: concatenate on the last dimension when ranks match; laminate (new last axis) when they broadcast to a stack. Exact laminate rule is Phase 2 detail; working default: `torch.cat` / `np.concatenate` on the last dim, error if ranks differ by more than we have specified. | 2 | adapt |
+| G027 | `,` | `++` | Ravel | Catenate / laminate | Monadic: flatten to 1-d (C order). Dyadic: `torch.cat` on the last dim. Rank difference 0 or 1 (unsqueeze the shorter on the join axis). 0-d ++ 0-d stacks to a 1-d pair. No implicit laminate: same-shape arrays still cat, they do not stack on a new last axis. | 2 | adapt |
 | G028 | `⍪` | `⍪` | Table | Catenate first | Monadic: reshape to a matrix, preserving axis 0. Dyadic: concatenate on axis 0. | 2 | implement |
 | G029 | `⌽` | `⌽` | Reverse last | Rotate last | Reverse or roll the last dimension. | 2 | implement |
 | G030 | `⊖` | `⊖` | Reverse first | Rotate first | Reverse or roll axis 0. | 2 | implement |

@@ -59,6 +59,8 @@ not add a parallel package.
    expansion (`+` for reduce, `+ ×` for inner product).
 6. Update the glyph row only if you discovered a real deviation that the
    catalog missed. Do not silently “fix” intent to match Dyalog.
+7. If the name is public, update the matching page in
+   [`manual/`](../manual/README.md) in the same work.
 
 ## Adding an operator or train
 
@@ -109,10 +111,12 @@ Phase 1 requirement.
 ## Documentation
 
 If implementation changes intended behaviour, change the docs in the same
-work. The catalog is the spec.
+work. The catalog is the spec. Public behaviour also belongs in
+[`manual/`](../manual/README.md) — that is the user book, not a second
+catalog.
 
-Prose in `docs/` is English, matching the design notes and the public
-identifiers.
+Prose in `docs/` and `manual/` is English, matching the design notes and
+the public identifiers.
 
 ## Out of scope until decided
 
