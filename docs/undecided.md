@@ -484,3 +484,100 @@ atop (`⍤`), not a 2-train `fork`.
 explicit pull-forward names one.
 
 **Impact.** `haply/trains.hy`, G077, [operators.md](operators.md).
+
+---
+
+## 63. Python lift on numeric glyphs
+
+**Question.** `?` `⌹` `⊤` `⊥` use `torch.as-tensor` on every argument.
+`○` `!` and the rest of the public glyphs use `require-torch`. Tests pin
+`(? 6)` and `(? 4 10)`. Should lists and Python numbers be arrays?
+
+**Options.**
+
+- A. Constructors and scalar specs may lift (`?`, `⍳`, shape codes).
+  Array operands (`⌹` `⊤` `⊥` `Y`, and every other glyph) stay
+  `require-torch`. Lists are not tensors (item 21 notes).
+- B. Lift on every glyph (`as-tensor` everywhere).
+- C. Keep the current split: only `?` `⌹` `⊤` `⊥` lift.
+
+**Working default.** A. `?` stays a constructor (item 30). `⌹` `⊤` `⊥`
+should move to `require-torch` when this item closes.
+
+**Impact.** `haply/numeric.hy`, item 21, tests for `?`.
+
+---
+
+## 64. Replicate mask vs expand mask
+
+**Question.** Expand rejects rank 0, float/complex, and integers other
+than 0/1. Replicate accepts any non-negative integer count, does not
+check float, and indexes `shape[axis]` on a 0-d `Y` (`IndexError`).
+
+**Options.**
+
+- A. Align replicate’s *checks* with expand: rank ≥ 1, boolean or
+  integer dtype. Integer *values* stay counts (0 drops, 2 repeats).
+  0-d `Y` is `ValueError`.
+- B. Leave replicate torch-ish (`repeat-interleave`, backend errors).
+- C. Loosen expand to match replicate (counts > 1 become copies).
+
+**Working default.** A. Applied on the PyTorch path: 0-d `Y` and
+float/complex masks are `ValueError`; integer counts stay. The item
+stays open until A is chosen.
+
+**Impact.** `replicate` in `_dispatch.hy`, G054, G055.
+
+---
+
+## 65. Intersection duplicates
+
+**Question.** Dyalog `∩` is a set. Haply `(∩ [1 2 3 2] [2 4])` is
+`[2 2]` (membership filter, stable from `X`). Tests pin that.
+
+**Options.**
+
+- A. Keep duplicates (current).
+- B. Unique like Dyalog (first occurrences from `X` that appear in `Y`).
+
+**Working default.** A. Catalog G041 is `adapt`.
+
+**Impact.** G041, `haply/search.hy`.
+
+---
+
+## 66. Nand and nor on non-booleans
+
+**Question.** Decision 46 splits `∧` `∨`: boolean logic, integer LCM/GCD,
+float `ValueError`. `⍲` `⍱` always call `logical_and` / `logical_or`
+(integers become truthy).
+
+**Options.**
+
+- A. Boolean only; integer and float are `ValueError`.
+- B. Always logical (current).
+- C. Same dtype split as `∧` `∨` (nand-of-LCM has no meaning).
+
+**Working default.** B until this closes. A matches the `∧` `∨` domain
+if we want one rule for the four glyphs.
+
+**Impact.** G024, G025, `haply/scalar.hy`.
+
+---
+
+## 67. Operator arity errors: expand-time vs runtime
+
+**Question.** `⌿` `⍀` `⍨` raise `TypeError` while the macro expands.
+`∘` `⍤` `⍥` `⍛` `fork` emit `(raise …)` so `pytest.raises` can catch
+them. Same class of mistake, two moments.
+
+**Options.**
+
+- A. Always emit a runtime `raise` (testable; one rule).
+- B. Expand-time for missing or extra forms (Hy-macro style).
+- C. Keep the mix (Phase 3 expand-time, Phase 5+ runtime).
+
+**Working default.** A for new macros. Migrate `⌿` `⍀` `⍨` when those
+heads are touched.
+
+**Impact.** `haply/macros.hy`, `haply/trains.hy`, operator tests.

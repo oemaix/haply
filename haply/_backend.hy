@@ -1,6 +1,6 @@
 ;; Type detection uses the type's module name so a missing optional backend
-;; stays optional later. Phase 1 still imports torch: it is required in the
-;; Nix shell, and some kernels need a 0-d tensor for a Python scalar.
+;; stays optional later. Torch is required in the Nix shell; some kernels
+;; need a 0-d tensor for a Python scalar. NumPy waits on Phase 7 (item 21).
 (import torch)
 
 (defn is-torch [x]
@@ -25,12 +25,12 @@
 (defn require-torch [name x]
   (if (is-torch x)
     x
-    (raise (TypeError (.format "{} Phase 1 accepts torch.Tensor, got {}"
+    (raise (TypeError (.format "{} accepts torch.Tensor, got {}"
                                name
                                (type x))))))
 
 (defn torch-monad [name f]
-  "Phase 1 monadic path: torch only (item 21)."
+  "PyTorch-only monadic path (item 21; NumPy is Phase 7)."
   (fn [y]
     (f (require-torch name y))))
 
@@ -41,7 +41,7 @@
     (torch.as-tensor x :device other.device)))
 
 (defn torch-dyad [name f]
-  "Phase 1 dyadic path: torch+torch or Python number + tensor.
+  "PyTorch dyadic path: torch+torch or Python number + tensor.
   Mixed tensor backends error. NumPy and Python+Python wait on item 21."
   (fn [x y]
     (setv tx (is-torch x)
@@ -55,7 +55,7 @@
       (and (or tx nx) (or ty ny) (not (= (backend x) (backend y))))
         (raise (TypeError "haply mixed tensor backends"))
       True
-        (raise (TypeError (.format "{} Phase 1 accepts torch.Tensor, got {} and {}"
+        (raise (TypeError (.format "{} accepts torch.Tensor, got {} and {}"
                                    name
                                    (type x)
                                    (type y)))))))

@@ -69,7 +69,7 @@ every start index.
 | Glyph | Monad | Dyad |
 | --- | --- | --- |
 | `⌷` | identity on a tensor | index `Y` by `X` (int, 0-d tensor, or a sequence of ints) |
-| `⊃` | first major cell (the scalar itself if rank 0) | *not shipped* (pick needs boxes) |
+| `⊃` | first major cell (the scalar itself if rank 0; empty first axis is `ValueError`) | *not shipped* (pick needs boxes) |
 
 ```hy
 (setv m (torch.tensor [[1 2 3] [4 5 6]]))

@@ -90,7 +90,10 @@
 (defn first-cell [y]
   (if (= y.ndim 0)
     y
-    (get y 0)))
+    (do
+      (when (= (get y.shape 0) 0)
+        (raise (ValueError "⊃ first axis must be non-empty")))
+      (get y 0))))
 
 (setv ⊃ (tmonad "⊃" first-cell))
 

@@ -37,9 +37,13 @@ haply/                      repository root
   tests/
     test_scalar.hy
     test_structural.hy
+    test_compare.hy
+    test_search.hy
+    test_numeric.hy
     test_operators.hy
     test_trains.hy
     test_dispatch.hy
+    test_hy_host.hy
 ```
 
 Phase 0 creates the package, `flake.nix`, and one passing test. It does
@@ -253,6 +257,11 @@ decision-gated, not a phase:
 - General axis (34), circular-table extent (47)
 - Aliases, oracles, package-layout close (39, 54, 55)
 - Longer forks (62)
+- Numeric lift vs `require-torch` (63)
+- Replicate mask strictness (64)
+- `∩` duplicates (65)
+- `⍲` `⍱` domain (66)
+- Macro error timing (67)
 
 ## Per-glyph implementation recipe
 

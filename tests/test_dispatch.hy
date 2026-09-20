@@ -13,7 +13,7 @@
   (assert (torch.equal (+ t t) (torch.tensor [2 4]))))
 
 (defn test-haply-plus-python-waits []
-  "Item 21: the Haply function is PyTorch-only in Phase 1."
+  "Item 21: the Haply function is PyTorch-only until Phase 7."
   (with [(pytest.raises TypeError)]
     (sc.+ 1 2)))
 

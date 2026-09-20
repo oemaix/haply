@@ -76,8 +76,9 @@ tests pin it down in Phase 3; otherwise implement positive `n` first.
 | Status | implement (decision 60) |
 
 **Intent.** If `X` is boolean, compress (keep along the axis). If `X` is
-integer, repeat each slice `X[i]` times (negative integers are an error in
-the working default, unless Phase 3 adopts Dyalog’s reverse-and-repeat).
+integer, repeat each slice `X[i]` times (negative integers are an error).
+`Y` must have rank ≥ 1. `X` must be boolean or integer (item 64 default A);
+float is a `ValueError`. Counts other than 0/1 stay legal (unlike expand).
 
 The macro distinguishes function operand vs array operand at expansion
 time when it can; otherwise at runtime.

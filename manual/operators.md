@@ -23,7 +23,9 @@ Kernel expansions use the name `torch`, so import it in the same file.
 ## Reduce and replicate — `⌿` / `⌿_`
 
 A function operand reduces. An array operand replicates (boolean
-compress, or integer repeat). Negative repeats are a `ValueError`.
+compress, or integer repeat). `Y` must have rank ≥ 1. The mask must be
+boolean or integer; a float mask is a `ValueError`. Negative repeats
+are a `ValueError`.
 
 ```hy
 (setv A (torch.tensor [[1 2 3] [4 5 6]]))

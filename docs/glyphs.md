@@ -13,7 +13,7 @@ Status values:
 | --- | --- |
 | **implement** | Specified; build it |
 | **adapt** | Build it with the stated Dyalog deviation |
-| **later** | Specified; not in Phase 1 |
+| **later** | Specified; not yet shipped |
 | **drop** | Will not be implemented |
 | **undecided** | See the linked decision number |
 
@@ -120,8 +120,8 @@ Comparisons are exact until decision 29 says otherwise.
 | G021 | `~` | `≁` | Not | Without | Monadic: logical not. Dyadic: keep values of `X` that are not in `Y` (ravel membership), tensor analogue of without. | 1 / 3 | adapt |
 | G022 | `∧` | `∧` | — | And / LCM | Boolean and; integer LCM (decision 46). Variadic fold (decision 37). | 1 | adapt |
 | G023 | `∨` | `∨` | — | Or / GCD | Boolean or; integer GCD (decision 46). Variadic fold (decision 37). | 1 | adapt |
-| G024 | `⍲` | `⍲` | — | Nand | `not (X and Y)` | 1 | implement |
-| G025 | `⍱` | `⍱` | — | Nor | `not (X or Y)` | 1 | implement |
+| G024 | `⍲` | `⍲` | — | Nand | `not (X and Y)`. Integer/float domain is item 66. | 1 | implement |
+| G025 | `⍱` | `⍱` | — | Nor | `not (X or Y)`. Integer/float domain is item 66. | 1 | implement |
 
 ---
 
@@ -162,7 +162,7 @@ Index origin is 0 (decision 28). Translate Dyalog examples accordingly.
 | G038 | `∊` | `∊` | Enlist | Membership | **Monadic enlist** becomes flatten (same as `++` on a simple tensor) or is dropped as redundant. Dyadic: `isin`. | 3 | adapt |
 | G039 | `⍷` | `⍷` | — | Find | Boolean mask of occurrences of array `X` as a sub-array of `Y`. Same shape as `Y`. Rank(`X`) < rank(`Y`) left-pads `X` with 1s; rank(`X`) > rank(`Y`) finds nothing. | 4 | implement |
 | G040 | `∪` | `∪` | Unique | Union | Monadic: unique values in ravel order of first occurrence. Dyadic union waits on how “set” we want tensors to be (working: unique of catenated ravels). | 3 | adapt |
-| G041 | `∩` | `∩` | — | Intersection | Values of `X` that appear in `Y`, stable order from `X`. | 3 | implement |
+| G041 | `∩` | `∩` | — | Intersection | Values of `X` that appear in `Y`, stable order from `X`, duplicates kept (item 65). | 3 | adapt |
 | G042 | `⍋` | `⍋` | Grade up | Dyadic grade up | Indices that sort `Y` ascending. Numeric only (decision 32); no collation alphabet. | 3 | adapt |
 | G043 | `⍒` | `⍒` | Grade down | Dyadic grade down | Same, descending. Numeric only (decision 32). | 3 | adapt |
 | G044 | `⌷` | `⌷` | Materialise | Index | Monadic materialise is identity on a tensor. Dyadic: index by `X` (list of index arrays / integers), 0-based. Prefer mapping to `tensor[…]` / `np.ix_` rather than APL squad idiosyncrasies. | 3 | adapt |
@@ -187,7 +187,7 @@ Decision 43 default: keep only a clean tensor analogue.
 | --- | --- | --- | --- | --- | --- | --- |
 | G048 | `⊂` | — | Enclose / partitioned enclose | No boxes. Drop, or later `unsqueeze` analogue if 43 chooses B. | — | drop |
 | G049 | `⊆` | — | Nest / partition | Drop. | — | drop |
-| G050 | `⊃` | `⊃` | First / pick | Working: monadic first major cell (or first element of a 1-d tensor). Dyadic pick is dropped (needs paths into boxes). | 3 | adapt |
+| G050 | `⊃` | `⊃` | First / pick | Working: monadic first major cell (or first element of a 1-d tensor). Empty first axis is `ValueError`. Dyadic pick is dropped (needs paths into boxes). | 3 | adapt |
 | G051 | `↑` monadic | — | Mix | Drop. Dyadic take is G032. | — | drop |
 | G052 | `↓` monadic | — | Split | Drop. Dyadic drop is G033. | — | drop |
 | G053 | `≡` monadic | — | Depth | Drop by default (G019, decision 56). | — | drop |

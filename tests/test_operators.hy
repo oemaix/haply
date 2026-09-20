@@ -44,6 +44,14 @@
   (with [(pytest.raises ValueError)]
     (⌿ (T 1 -1) (T 3 4))))
 
+(defn test-replicate-scalar-error []
+  (with [(pytest.raises ValueError)]
+    (⌿ (T 1) (torch.tensor 3))))
+
+(defn test-replicate-float-error []
+  (with [(pytest.raises ValueError)]
+    (⌿ (torch.tensor [1.0 0.0]) (T 7 8))))
+
 (defn test-nwise-plus []
   (assert (torch.equal (⌿ 2 + (T 1 2 3 4)) (T 3 5 7))))
 

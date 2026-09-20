@@ -84,8 +84,12 @@
   "Boolean compress or integer repeat along `axis`. Negative repeats error."
   (setv y (require-torch "⌿" y)
         x (if (is-torch x) x (torch.as-tensor x :device y.device)))
+  (when (= y.ndim 0)
+    (raise (ValueError "⌿ replicate needs rank ≥ 1")))
   (when (> x.ndim 1)
     (raise (ValueError "⌿ replicate X must have rank 0 or 1")))
+  (when (or (.is-floating-point x) (.is-complex x))
+    (raise (ValueError "⌿ replicate X must be boolean or integer")))
   (setv x (if (= x.ndim 0) (torch.reshape x [1]) x)
         n (get y.shape axis))
   (when (!= (.numel x) n)

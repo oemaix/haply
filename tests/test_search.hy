@@ -81,6 +81,10 @@
   (with [(pytest.raises TypeError)]
     (⊃ 0 (T 1 2))))
 
+(defn test-first-empty-error []
+  (with [(pytest.raises ValueError)]
+    (⊃ (torch.tensor [] :dtype torch.int64))))
+
 ;; --- G040 ∪ / G041 ∩ ------------------------------------------------------
 
 (defn test-unique []

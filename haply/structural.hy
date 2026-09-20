@@ -93,7 +93,7 @@
   (if (is-torch x)
     (do
       (when (> (.numel x) 1)
-        (raise (ValueError "⌽ / ⊖ Phase 2 rotation X must be a scalar")))
+        (raise (ValueError "⌽ / ⊖ rotation X must be a scalar")))
       (int (.item x)))
     (int x)))
 

@@ -146,7 +146,7 @@
   (setv n (len forms))
   (cond
     (and (>= n 2) (is-not (_int-lit (get forms 1)) None))
-      `(raise (TypeError "⍤ rank (array operand) is not in Phase 5"))
+      `(raise (TypeError "⍤ rank (array operand) waits on item 48"))
     (= n 3)
       `(~(get forms 0) (~(get forms 1) ~(get forms 2)))
     (= n 4)
