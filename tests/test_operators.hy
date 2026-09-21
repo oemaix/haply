@@ -1,4 +1,4 @@
-(require haply.macros [⌿ ⌿_ ⍀ ⍀_ ⍨ · outer ¨])
+(require haply.macros [⌿ ⌿_ ⍀ ⍀_ ⍨ · ∘· ¨])
 (import haply [× ⌽])
 (import haply.scalar :as sc)
 (import torch)
@@ -113,11 +113,11 @@
 ;; --- outer ----------------------------------------------------------------
 
 (defn test-outer-times []
-  (assert (torch.equal (outer × (T 1 2) (T 3 4 5))
+  (assert (torch.equal (∘· × (T 1 2) (T 3 4 5))
                        (torch.tensor [[3 4 5] [6 8 10]]))))
 
 (defn test-outer-plus []
-  (assert (torch.equal (outer + (T 1 2) (T 10 20))
+  (assert (torch.equal (∘· + (T 1 2) (T 10 20))
                        (torch.tensor [[11 21] [12 22]]))))
 
 ;; --- each -----------------------------------------------------------------

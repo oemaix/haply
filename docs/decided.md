@@ -98,10 +98,10 @@ replication of Dyalog is neither required nor possible.
 
 ## 13. Fork is the only named train; combinations use APL glyphs
 
-Revised 2026-09-17 (with decision 58).
+Revised 2026-09-21 (glyph `⋔`; was English `(fork …)`).
 
-The only APL train without a dedicated operator glyph is the **fork**.
-Haply writes it as `(fork …)`.
+The only APL train without a Dyalog operator glyph is the **fork**.
+Haply writes it as `⋔`. There is no `(fork …)` or `(hook …)` macro.
 
 Function combination uses the Dyalog operator glyphs, not English names
 and not a separate hook form:
@@ -113,8 +113,8 @@ and not a separate hook form:
 | Behind | `⍛` |
 | Over | `⍥` |
 
-There are no macros named `atop`, `hook`, `beside`, or `over`. J-style
-hook is already those four operators (typically beside / behind).
+There are no macros named `fork`, `atop`, `hook`, `beside`, or `over`.
+J-style hook is already those four operators (typically beside / behind).
 
 ---
 
@@ -170,7 +170,7 @@ Chosen 2026-09-17: option A, plus jot for combination.
 
 Dyalog `.` is Haply `·`. Hy/Python `@` stays matmul and is not a Haply
 export. Function combination uses APL jot `∘` (decision 13), not `@` and
-not `.`.
+not `.`. At, if it ships (item 48), is `⊡`.
 
 ---
 
@@ -224,17 +224,17 @@ of reals to complex.
 
 ## 58. Train and combination names
 
-Chosen 2026-09-17.
+Chosen 2026-09-17. Revised 2026-09-21 (`⋔` for the 3-train).
 
 | Form | Haply |
 | --- | --- |
-| Fork | `(fork …)` |
+| Fork | `⋔` |
 | Atop | `⍤` |
 | Behind | `⍛` |
 | Beside | `∘` |
 | Over | `⍥` |
 
-No `(hook …)`. See decision 13.
+No `(fork …)` or `(hook …)`. See decision 13.
 
 ---
 
@@ -248,18 +248,41 @@ The repo `LICENSE` file is that text. Package metadata must match.
 
 ## 59. Outer product is `∘.`
 
-Chosen 2026-09-17: option A.
+Chosen 2026-09-17: option A. Revised 2026-09-21 (Hy head `∘·`, decision 61).
+
+The catalog / Dyalog name remains jot-dot. Hy cannot parse `∘.` (ASCII
+`.` is attribute syntax). The writable identifier is `∘·`.
 
 ```hy
-(∘. × A B)
+(∘· × A B)
 ```
 
-Beside remains `∘` (decisions 13, 23, 58). Outer product is the two-character
-name `∘.`, not a special case of jot.
+Beside remains `∘` (decisions 13, 23, 58). Outer product is jot-dot, not
+a special case of jot.
 
 Option C would have overloaded `∘` so one head did both beside and outer
 product (for example by treating a missing second function, or a lone
 dot, as outer). That collides with jot and is rejected.
+
+---
+
+## 61. Writable name for outer product
+
+Chosen 2026-09-21: option B, specifically `∘·`.
+
+Decision 59 names the operator jot-dot, not an overload of jot. Hy 1.2
+cannot parse `∘.` (`∘` then `.` is attribute syntax). The Hy head is
+`∘·` — jot plus Haply’s inner-product dot `·` — one identifier.
+
+```hy
+(∘· × A B)
+```
+
+`(∘ · × A B)` is two identifiers (jot, then `·`) and is not this
+operator. Beside remains `∘`. There is no English `outer` macro
+(decision 39: do not rename a glyph to English in the implementation).
+
+Rejected: A (`outer`) and C (overload `∘`).
 
 ---
 
@@ -379,6 +402,7 @@ Haply name keep Hy’s meaning (decision 8).
 | `~` | bitwise-not confusion | `≁` (19) |
 | `^` | Hy XOR / host name | `∧` (25) |
 | `¯` | Hy already has `-` | `-` (14) |
+| `@` | Hy/Python matmul | `⊡` (23; item 48) |
 
 **May export** (only after `import haply`):
 

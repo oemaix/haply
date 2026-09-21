@@ -1,4 +1,4 @@
-;; Named 3-train. Require this module; do not import it.
+;; 3-train ⋔. Require this module; do not import it.
 (import hy.models [Symbol Integer Expression])
 
 (eval-and-compile
@@ -30,7 +30,7 @@
       (is-not (_int-lit op) None) op
       True (_dispatch-call 'fork-wing op #* args))))
 
-(defmacro fork [f g h #* rest]
+(defmacro ⋔ [f g h #* rest]
   (setv n (len rest))
   (cond
     (= n 1)
@@ -39,4 +39,4 @@
       `(~g ~(_wing f (get rest 0) (get rest 1))
            ~(_wing h (get rest 0) (get rest 1)))
     True
-      '(raise (TypeError "fork is the 3-train only"))))
+      '(raise (TypeError "⋔ is the 3-train only"))))

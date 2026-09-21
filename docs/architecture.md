@@ -33,7 +33,7 @@ haply/                      repository root
     search.hy               G039–G043
     numeric.hy              G010–G012, G045–G047
     macros.hy               operators (require this)
-    trains.hy               fork only
+    trains.hy               ⋔ only
   tests/
     test_scalar.hy
     test_structural.hy
@@ -60,18 +60,18 @@ Functions (selective, opt-in shadowing — decision 53):
 Macros:
 
 ```hy
-(require haply.macros [⌿ ⌿_ ⍀ ⍀_ ⍨ · outer ¨ ∘ ⍤ ⍥ ⍛])
-(require haply.trains [fork])
+(require haply.macros [⌿ ⌿_ ⍀ ⍀_ ⍨ · ∘· ¨ ∘ ⍤ ⍥ ⍛])
+(require haply.trains [⋔])
 ```
 
-Phase 5 adds `∘` `⍤` `⍥` `⍛` here and `(require haply.trains [fork])`.
-`outer` is the Hy-legal head for catalog `∘.` (item 61). `⍤` in Phase 5
+Phase 5 adds `∘` `⍤` `⍥` `⍛` here and `(require haply.trains [⋔])`.
+`∘·` is the Hy-legal head for catalog `∘.` (decision 61). `⍤` in Phase 5
 is atop (function operand) only; rank (array operand) waits on item 48.
 
 A convenience star-import or star-require should not be the documented
 path. Document the two-step import/require.
 
-Never export: `*` `/` `=` `|` `.` `,` `~` `^` `¯`.
+Never export: `*` `/` `=` `|` `.` `,` `~` `^` `¯` `@`.
 
 ## Backend detection
 
@@ -143,7 +143,7 @@ in `_dispatch.hy`, not to a nested tree of closures.
 Trains expand to nested calls of existing primitives:
 
 ```hy
-(fork ⊣ + ⊢ X Y)  ⇒  (+ (⊣ X Y) (⊢ X Y))
+(⋔ ⊣ + ⊢ X Y)  ⇒  (+ (⊣ X Y) (⊢ X Y))
 ```
 
 ## Errors
@@ -198,19 +198,19 @@ Done when `(? k n)` is a deal of `k` distinct integers in `[0, n)`,
 `(⌹ X Y)` solves `Y B = X`, and `(⊥ X (⊤ X Y))` recovers a small
 integer `Y`. **Met** for PyTorch.
 
-### Phase 5 — fork and jot family
+### Phase 5 — `⋔` and jot family
 
-Composition macros and the named 3-train. Item 48 is **not** this phase.
+Composition macros and the 3-train. Item 48 is **not** this phase.
 
 | Ship | Leave |
 | --- | --- |
-| `(fork f g h …)` — 3-train only | longer forks — item 62 |
+| `(⋔ f g h …)` — 3-train only | longer trains — item 62 |
 | `∘` beside (two functions, then bind) | |
 | `⍤` atop (function operand) | `⍤` rank (array operand) — item 48 |
-| `⍥` over | `⍣` `⌸` `⌺` At — item 48 |
+| `⍥` over | `⍣` `⌸` `⌺` At `⊡` — item 48 |
 | `⍛` behind | |
 
-Done when `(fork ⊣ + ⊢ X Y)` matches `(+ X Y)` and `(∘ × + Y)` matches
+Done when `(⋔ ⊣ + ⊢ X Y)` matches `(+ X Y)` and `(∘ × + Y)` matches
 `(× (+ Y))` on PyTorch tensors. **Met** for PyTorch.
 
 ### Phase 6 — specified leftovers
@@ -242,7 +242,7 @@ which of these ship:
 - Key `⌸`
 - Stencil `⌺`
 - Rank (array operand of `⍤`)
-- At (not `@`)
+- At `⊡` (not `@`)
 
 No done-when until that item moves.
 

@@ -13,9 +13,9 @@ Prose here is English.
 
 Phases 0–6 are available on `torch.Tensor`. NumPy and a Python-first
 import surface are not shipped. Operators are macros:
-`(require haply.macros [⌿ · outer ∘ …])`. Fork is
-`(require haply.trains [fork])`. NumPy is Phase 7. Power, key, stencil,
-rank, and At are Phase 8.
+`(require haply.macros [⌿ · ∘· ∘ …])`. The 3-train is
+`(require haply.trains [⋔])`. NumPy is Phase 7. Power, key, stencil,
+rank, and At `⊡` are Phase 8.
 
 ## What Haply is
 
@@ -64,8 +64,8 @@ Select the glyphs you need. Do not star-import.
 
 ```hy
 (import haply [⍴ × ÷ ⌽ ++ ⍳])
-(require haply.macros [⌿ · outer ∘])
-(require haply.trains [fork])
+(require haply.macros [⌿ · ∘· ∘])
+(require haply.trains [⋔])
 ```
 
 Hy macros and functions do **not** share a namespace. After
@@ -112,7 +112,8 @@ These Dyalog characters are **not** Haply names.
 | `\|` | `\|\|` | reserved by the host |
 | `.` | `·` | attribute access (inner product) |
 | `/` `\` | `⌿_` `⍀_` | Hy division; last-axis slash |
-| `∘.` | `outer` | Hy cannot parse `∘.` |
+| `∘.` | `∘·` | Hy cannot parse `∘.` (ASCII dot) |
+| `@` | — | Hy/Python matmul |
 
 ## Pages
 
@@ -121,7 +122,7 @@ These Dyalog characters are **not** Haply names.
 | [scalars.md](scalars.md) | Arithmetic, compare, logic, circular, factorial |
 | [structure.md](structure.md) | Shape, ravel, reverse, take/drop, match, tally |
 | [search.md](search.md) | Iota, where, membership, unique, grade, find, index |
-| [operators.md](operators.md) | Reduce, scan, expand, commute, products, each, jot, fork |
+| [operators.md](operators.md) | Reduce, scan, expand, commute, products, each, jot, `⋔` |
 | [numeric.md](numeric.md) | Roll/deal, matrix inverse/divide, encode/decode |
 | [recipes.md](recipes.md) | Short programs that run today |
 | [ai.md](ai.md) | Compact sheet for assistants |
@@ -129,6 +130,6 @@ These Dyalog characters are **not** Haply names.
 ## Not in this manual yet
 
 - NumPy backend — Phase 7
-- Power, key, stencil, rank, At — Phase 8
+- Power, key, stencil, rank, At `⊡` — Phase 8
 - English aliases (glyphs are the names)
 - Runtime `__doc__` on every export

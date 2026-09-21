@@ -176,12 +176,12 @@ Hy/Python matmul. Function combination is jot `∘` (decisions 13 and 23).
 
 ---
 
-## Outer product — `∘.`
+## Outer product — `∘·`
 
 | | |
 | --- | --- |
 | Dyalog | `X ∘.g Y` |
-| Haply | `(outer g X Y)` (decision 59 name `∘.`; item 61) |
+| Haply | `(∘· g X Y)` (decisions 59 and 61) |
 | Phase | 3 |
 | Status | implement |
 
@@ -189,7 +189,9 @@ Hy/Python matmul. Function combination is jot `∘` (decisions 13 and 23).
 Working default: elementwise outer — result shape `shape(X) + shape(Y)`,
 like `np.multiply.outer` when `g` is `×`.
 
-Hy cannot parse `∘.` as a symbol (item 61). The macro head is `outer`.
+Hy cannot parse `∘.` as a symbol (ASCII `.` is attribute syntax). The
+macro head is `∘·` (jot plus Haply `·`). `(∘ · g X Y)` is two identifiers
+and is not this operator.
 
 Not Dyalog’s nested-array result structure; the result is a tensor.
 
@@ -266,10 +268,10 @@ Specified so names stay stable. Phase 8, after item 48. Not Phase 5.
 Working default: integer `n` only, including `0` (identity) and negative
 `n` only when `f` has a defined inverse (otherwise error).
 
-### At
+### At — `⊡`
 
 Dyalog `@` is selective replacement. Haply does not take `@` (decision
-23: `@` stays Hy/Python matmul). If At ships, it needs another spelling.
+23: `@` stays Hy/Python matmul). If At ships, the glyph is `⊡`.
 Phase 8 (item 48).
 
 ### Key — `⌸`
@@ -293,20 +295,20 @@ See decision 44 and [glyphs.md](glyphs.md) section 11.
 ## Trains
 
 Dyalog trains are juxtaposition. Haply does not parse juxtaposition as a
-train (decision 2). The only named train is fork (decisions 13 and 58).
+train (decision 2). The only train is `⋔` (decisions 13 and 58).
 Atop is `⍤`, not a 2-train parser.
 
-### Fork — `(fork …)`
+### Fork — `⋔`
 
 Dyalog `(f g h)` on `Y` is `(f Y) g (h Y)`; on `X Y` is `(X f Y) g (X h Y)`.
 
 ```hy
-(fork f g h Y)
-(fork f g h X Y)
+(⋔ f g h Y)
+(⋔ f g h X Y)
 ```
 
 **Intent.** Same as Dyalog 3-trains on functions. Phase 5 is the 3-train
-only. Longer forks `(fork a b c d e)` are item 62, not item 48.
+only. Longer trains `(⋔ a b c d e)` are item 62, not item 48.
 
 `f` and `h` may be arrays (Dyalog constant forks). Working default: allow
 array wings.

@@ -20,8 +20,9 @@ Status values:
 Phase numbers follow [architecture.md](architecture.md).
 
 Closed names: inner product `·` (23), magnitude/residue `||` (24),
-AND/OR `∧` `∨` (25), trains and combinations (13, 58). Glyph ids do not
-change when a decision lands.
+AND/OR `∧` `∨` (25), trains and combinations (13, 58), outer `∘·` (61),
+At `⊡` (ships with item 48). Glyph ids do not change when a decision
+lands.
 
 ## How a Haply call looks
 
@@ -49,6 +50,8 @@ to implement.
 | `=` | Hy equality | `==` | 17 |
 | `|` | Hy name reserved for the host | `||` | 24 |
 | `.` | Hy attribute access | `·` | 23 |
+| `∘.` | Hy attribute syntax (`∘` then `.`) | `∘·` | 59, 61 |
+| `@` | Hy/Python matmul | `⊡` | 23; ships with 48 |
 | `¯` | Hy already has `-` | `-` | 14 |
 
 Hy names that Haply *may* export, with opt-in shadowing (decision 53):
@@ -225,12 +228,12 @@ Full specification: [operators.md](operators.md).
 | G062 | `¨` | `¨` | Each | 3 | implement (42 default) |
 | G063 | `⍨` | `⍨` | Commute / selfie / constant | 3 | implement |
 | G064 | `.` | `·` | Inner product | 3 | implement |
-| G065 | `∘.` | `outer` | Outer product | 3 | implement |
+| G065 | `∘.` | `∘·` | Outer product | 3 | implement |
 | G066 | `∘` | `∘` | Beside (jot); function combination | 5 | implement |
 | G067 | `⍤` | `⍤` | Atop (function operand); rank (array operand) | 5 / 8 | implement (atop); rank later (48) |
 | G068 | `⍥` | `⍥` | Over | 5 | implement |
 | G069 | `⍣` | `⍣` | Power operator | 8 | later (48) |
-| G070 | `@` | — | At | 8 | later (48) |
+| G070 | `@` | `⊡` | At | 8 | later (48) |
 | G071 | `⌸` | `⌸` | Key | 8 | later (48) |
 | G072 | `⌺` | `⌺` | Stencil | 8 | later (48) |
 | G073 | `⍛` | `⍛` | Behind | 5 | implement |
@@ -240,14 +243,15 @@ Full specification: [operators.md](operators.md).
 
 ---
 
-## 10. Named combinators (not glyphs)
+## 10. Trains
 
-Decision 13 and 58. The only named train is fork. Atop, beside, behind,
-and over are the glyphs in section 9. There is no `(hook …)`.
+Decision 13 and 58. The only train is the glyph `⋔`. Atop, beside,
+behind, and over are the glyphs in section 9. There is no `(fork …)` or
+`(hook …)`.
 
 | Id | Concept | Haply | Phase | Status |
 | --- | --- | --- | --- | --- |
-| G077 | Fork | `(fork f g h …)` | 5 | implement (3-train); longer later (62) |
+| G077 | Fork | `⋔` | 5 | implement (3-train); longer later (62) |
 | G078 | Atop | `⍤` (see G067) | 5 | implement |
 | G079 | Hook | — (covered by `⍤` `∘` `⍛` `⍥`) | — | drop |
 
@@ -296,15 +300,15 @@ Build these names. This is the concrete v1-or-specified set.
 
 ### Phase 3 — search and operators
 
-`⍳` `⍸` `∊` `∪` `∩` `⍋` `⍒` `⌷` `⊃` `⌿` `⌿_` `⍀` `⍀_` `⍨` `·` `outer` `¨`
+`⍳` `⍸` `∊` `∪` `∩` `⍋` `⍒` `⌷` `⊃` `⌿` `⌿_` `⍀` `⍀_` `⍨` `·` `∘·` `¨`
 
 ### Phase 4 — remaining functions
 
 `?` `⍷` `⌹` `⊤` `⊥`
 
-### Phase 5 — fork and jot family
+### Phase 5 — `⋔` and jot family
 
-`fork` `∘` `⍤` (atop only) `⍥` `⍛`
+`⋔` `∘` `⍤` (atop only) `⍥` `⍛`
 
 ### Phase 6 — specified leftovers
 
@@ -316,11 +320,11 @@ No new glyphs. Repeat shipped names on `numpy.ndarray` (item 21).
 
 ### Phase 8 — item 48 operators
 
-`⍣` `⌸` `⌺` ; `⍤` rank (array operand); At (not `@`)
+`⍣` `⌸` `⌺` ; `⍤` rank (array operand); At `⊡` (not `@`)
 
 ### Never (unless a new decision says so)
 
-`/` `\` `*` `=` `,` `~` `|` `.` `¯` `←` `→` `⍝` `⍎` `⍕` `⌶` `&` `⍠` `⎕` `⍞` `⊂` `⊆` mix, split, depth, I/O, system space
+`/` `\` `*` `=` `,` `~` `|` `.` `¯` `@` `←` `→` `⍝` `⍎` `⍕` `⌶` `&` `⍠` `⎕` `⍞` `⊂` `⊆` mix, split, depth, I/O, system space
 
 ---
 

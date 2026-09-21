@@ -32,7 +32,7 @@ must stay visible in the catalog.
 | Order | Right-to-left | Lisp inside-out |
 | Functions | Primitive or defined functions | Hy functions |
 | Operators | Primitive operators producing derived functions | Hy macros |
-| Trains | Tacit forks / atops | `(fork …)`; atop/beside/behind/over are `⍤` `∘` `⍛` `⍥` |
+| Trains | Tacit forks / atops | `⋔`; atop/beside/behind/over are `⍤` `∘` `⍛` `⍥` |
 | Assignment | `←` and modified assignment | Hy `setv` / `setx` / … |
 | Comments | `⍝` | Hy `;` |
 | Control | `:If`, guards, `→` | Hy `if`, `cond`, `while`, … |

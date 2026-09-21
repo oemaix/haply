@@ -27,5 +27,5 @@
 | **Reduce** | Collapse one axis by repeating a dyadic function (`(⌿ + A)`). |
 | **Scan** | Prefix (or axis-wise) cumulative application of a dyadic function. |
 | **Tally** | Number of major cells (`≢`). |
-| **Train** | Tacit combination of functions. Haply’s only named train is `(fork …)`. Atop, beside, behind, and over are `⍤` `∘` `⍛` `⍥`. |
+| **Train** | Tacit combination of functions. Haply’s only train is `⋔`. Atop, beside, behind, and over are `⍤` `∘` `⍛` `⍥`. |
 | **Working default** | Temporary choice on an undecided item so coding can start. Not a decision. |

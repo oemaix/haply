@@ -69,7 +69,7 @@ without a second shape calculus.
 ## 5. Macros for operators and trains
 
 APL *operators* take functions as operands (`⌿`, `¨`, `·`, `∘`, …). The
-only named train is `(fork …)`; atop, beside, behind, and over use `⍤`
+only train is `⋔`; atop, beside, behind, and over use `⍤`
 `∘` `⍛` `⍥` (decisions 13 and 58).
 
 In Haply these are **Hy macros**, not higher-order functions that close over

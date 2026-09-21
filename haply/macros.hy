@@ -110,8 +110,8 @@
     `(torch.matmul ~x ~y)
     (_dispatch-call 'inner-product f g x y)))
 
-;; Hy cannot parse the catalog name ∘. (item 61). Writable name: outer.
-(defmacro outer [g x y]
+;; Hy cannot parse Dyalog ∘. (ASCII dot). Writable name: ∘· (decision 61).
+(defmacro ∘· [g x y]
   (setv s (_sym-str g)
         left (_dispatch-call 'outer-left x y))
   (cond

@@ -1,5 +1,5 @@
 (require haply.macros [∘ ⍤ ⍥ ⍛])
-(require haply.trains [fork])
+(require haply.trains [⋔])
 (import haply [× ⊣ ⊢])
 (import haply.scalar :as sc)
 (import torch)
@@ -13,23 +13,23 @@
 (defn test-fork-plus-wings []
   (setv X (T 1 2 3)
         Y (T 10 20 30))
-  (assert (torch.equal (fork ⊣ + ⊢ X Y) (+ X Y))))
+  (assert (torch.equal (⋔ ⊣ + ⊢ X Y) (+ X Y))))
 
 (defn test-beside-times-plus []
   (setv Y (T -2 0 4))
   (assert (torch.equal (∘ × + Y) (× (+ Y)))))
 
-;; --- fork -----------------------------------------------------------------
+;; --- ⋔ --------------------------------------------------------------------
 
 (defn test-fork-monad []
-  (assert (torch.equal (fork ⊢ + ⊢ (T 1 2 3)) (T 2 4 6))))
+  (assert (torch.equal (⋔ ⊢ + ⊢ (T 1 2 3)) (T 2 4 6))))
 
 (defn test-fork-constant-wing []
-  (assert (torch.equal (fork 0 + ⊢ (T 1 2 3)) (T 1 2 3))))
+  (assert (torch.equal (⋔ 0 + ⊢ (T 1 2 3)) (T 1 2 3))))
 
 (defn test-fork-too-long []
   (with [(pytest.raises TypeError)]
-    (fork ⊣ + ⊢ ⊣ (T 1) (T 2))))
+    (⋔ ⊣ + ⊢ ⊣ (T 1) (T 2))))
 
 ;; --- beside / bind --------------------------------------------------------
 

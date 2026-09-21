@@ -35,7 +35,7 @@ specification lives in [`docs/`](docs/README.md).
 - **Tensors, not APL arrays.** `torch.Tensor` or `numpy.ndarray`. No boxes.
 - **Broadcasting, not conformability.** If the backend allows the shapes,
   Haply allows them.
-- **Macros for operators and trains.** `⌿`, `·`, `∘`, `(fork …)`, and
+- **Macros for operators and trains.** `⌿`, `·`, `∘·`, `∘`, `⋔`, and
   friends expand toward backend kernels.
 - **Do not break Hy, NumPy, or PyTorch.** Conflicting glyphs are renamed
   (`**`, `==`, `++`, `≁`, `⌿_`, `||`, `·`).

@@ -12,8 +12,8 @@ not this file.
 - Broadcast: PyTorch. Not APL conformability.
 - Index origin: 0. Compare: exact. No prototypes.
 - Public import: `(import haply [⍴ × ⌽ ⍳ …])` — selective, never `*`.
-- Operators: `(require haply.macros [⌿ ⌿_ ⍀ ⍀_ ⍨ · outer ¨ ∘ ⍤ ⍥ ⍛])`.
-- Fork: `(require haply.trains [fork])`. 3-train only.
+- Operators: `(require haply.macros [⌿ ⌿_ ⍀ ⍀_ ⍨ · ∘· ¨ ∘ ⍤ ⍥ ⍛])`.
+- Train: `(require haply.trains [⋔])`. 3-train only.
 - No Python-first API.
 
 ## Call-position traps
@@ -50,16 +50,16 @@ Folds (`+` `×` `⌊` `⌈` `∧` `∨`): 1 = monad, 2 = dyad, 3+ = reduce over
 **Numeric.** `?` `⌹` `⊤` `⊥`
 
 **Operators** (`require haply.macros`). `⌿` `⌿_` `⍀` `⍀_` `⍨` `·`
-`outer` `¨` `∘` `⍤` `⍥` `⍛`. Not `∘.` (Hy cannot parse it). `⍤` is
+`∘·` `¨` `∘` `⍤` `⍥` `⍛`. Not `∘.` (write `∘·`). `⍤` is
 atop only; an integer right operand is a `TypeError`.
 
-**Train** (`require haply.trains`). `fork` — 3-train only.
+**Train** (`require haply.trains`). `⋔` — 3-train only.
 
 ## Do / do not
 
 - Do write `(g Y)` / `(g X Y)`. Do not write infix `X g Y` or `g⌿Y`.
 - Do use Haply names from the tables. Do not invent `*`, `/`, `=`, `,`,
-  `~`, `|`, `.`, `¯`, `∘.`, or English aliases.
+  `~`, `|`, `.`, `¯`, `∘.`, `@`, or English aliases.
 - Do document reshape as “size must match”. Do not recycle like Dyalog.
 - Do treat `↑` `↓` as dyadic only; pad is zero. Do not call them monadically.
 - Do treat `≡` as dyadic match (Python `bool`). Do not ask for depth.
@@ -68,7 +68,7 @@ atop only; an integer right operand is a `TypeError`.
 - Do use `||` as magnitude / residue of `Y` by `X`.
 - Do treat `⍳` not-found as `n`. Do treat `⍋` as numeric only.
 - Do treat `(⌹ X Y)` as solve `Y B = X`. Do treat `?` bounds as `[0, n)`.
-- Do `require` operators and `fork`; kernel expansions need `torch` in the file.
+- Do `require` operators and `⋔`; kernel expansions need `torch` in the file.
 - Do treat `(⍀ mask Y)` as expand (0/1 or boolean; fill is zero).
 - Do treat `(⌿ mask Y)` replicate as rank ≥ 1 and boolean/integer mask.
 - Do treat `⊃` of an empty first axis as `ValueError`.

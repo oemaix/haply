@@ -39,7 +39,7 @@ hy -m pytest tests
    class.
 4. Operators and trains are Hy macros (`require haply.macros`,
    `require haply.trains`). Do not `import` those modules.
-5. Never export Hy-colliding names: `*` `/` `=` `|` `.` `,` `~` `^` `¯`.
+5. Never export Hy-colliding names: `*` `/` `=` `|` `.` `,` `~` `^` `¯` `@`.
 6. If the name is public, update the matching [`manual/`](manual/README.md)
    page in the same work.
 7. Prose in `docs/` and `manual/` is English.
@@ -50,7 +50,7 @@ Closing a design question means **moving** the whole entry from
 ## Out of scope until decided
 
 Python-first API (item 22), NumPy as a shipping backend (Phase 7 /
-item 21), and item 48 operators (`⍣` `⌸` `⌺`, rank-`⍤`, At).
+item 21), and item 48 operators (`⍣` `⌸` `⌺`, rank-`⍤`, At `⊡`).
 
 ## License
 

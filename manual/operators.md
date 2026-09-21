@@ -5,8 +5,8 @@ Operators are **macros**. Require them; do not `import` them.
 ```hy
 (import torch)
 (import haply [× ⌽])
-(require haply.macros [⌿ ⌿_ ⍀ ⍀_ ⍨ · outer ¨ ∘ ⍤ ⍥ ⍛])
-(require haply.trains [fork])
+(require haply.macros [⌿ ⌿_ ⍀ ⍀_ ⍨ · ∘· ¨ ∘ ⍤ ⍥ ⍛])
+(require haply.trains [⋔])
 ```
 
 Known operands (`+` `×` `⌈` `⌊` for reduce/scan; `+ ×` for inner
@@ -81,12 +81,13 @@ kernel rewrite.
 
 ```hy
 (· + × X Y)        ; torch.matmul
-(outer × X Y)      ; all-pairs times; shape shape(X)+shape(Y)
-(outer + X Y)      ; all-pairs plus
+(∘· × X Y)         ; all-pairs times; shape shape(X)+shape(Y)
+(∘· + X Y)         ; all-pairs plus
 ```
 
-The catalog name for outer is `∘.`. Hy cannot parse that identifier; the
-macro is `outer`.
+Dyalog writes outer as `∘.`. That is two tokens in Hy (`∘` then
+attribute `.`). The macro is one identifier, `∘·`. `(∘ · × X Y)` is jot,
+not outer.
 
 ## Each — `¨`
 
@@ -138,18 +139,18 @@ Haply, not Dyalog: the monad is `(f (g Y))`; the dyad is `((g X) f Y)`.
 (⍛ + ⊢ X Y)            ; (+ X Y)
 ```
 
-## Fork — `(fork …)`
+## Fork — `⋔`
 
 The 3-train only. Require `haply.trains`, not `haply.macros`.
 
 ```hy
-(fork ⊣ + ⊢ X Y)       ; (+ X Y)
-(fork ⊢ + ⊢ Y)         ; (+ Y Y)
-(fork 0 + ⊢ Y)         ; (+ 0 Y)
+(⋔ ⊣ + ⊢ X Y)       ; (+ X Y)
+(⋔ ⊢ + ⊢ Y)         ; (+ Y Y)
+(⋔ 0 + ⊢ Y)         ; (+ 0 Y)
 ```
 
-A longer fork is a `TypeError`. Wings that are known glyphs or integer
+A longer train is a `TypeError`. Wings that are known glyphs or integer
 literals expand in place; anything else is a constant unless it is
 callable.
 
-Call-position `+` in a fork is Hy `+`, which already adds tensors.
+Call-position `+` in a `⋔` is Hy `+`, which already adds tensors.

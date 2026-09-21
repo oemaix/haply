@@ -178,8 +178,8 @@
 
 (defn outer-left [x y]
   "Reshape `x` so an elementwise `g` with `y` is an outer product."
-  (setv x (require-torch "outer" x)
-        y (require-torch "outer" y))
+  (setv         x (require-torch "∘·" x)
+        y (require-torch "∘·" y))
   (torch.reshape x (+ (list x.shape) (lfor _ (range y.ndim) 1))))
 
 (defn inner-product [f g x y]

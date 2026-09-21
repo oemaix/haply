@@ -72,7 +72,7 @@ users the same product.
 | --- | --- | --- |
 | Functions such as `⍴` `×` `∧` | Hy names | Also legal Python identifiers |
 | `+` `-` `<` `>` | Hy names; opt-in shadow | **Not** legal Python identifiers; need `getattr` or a mapping |
-| Operators / trains (`⌿`, `fork`, `∘`) | Hy `require` macros | Macros do not run from Python; B needs function fallbacks or drops them |
+| Operators / trains (`⌿`, `⋔`, `∘`) | Hy `require` macros | Macros do not run from Python; B needs function fallbacks or drops them |
 | Docs and tests | Hy examples | A second surface to specify and test |
 
 C is B with ASCII names instead of Unicode. Decision 39 already limits
@@ -363,15 +363,15 @@ parts) selected by integer `X`.
 **Question.** Which of Key, Stencil, Rank, Power, and At belong in the
 first shipped version?
 
-Names for atop, beside, behind, over, and fork are already closed
-(decisions 13 and 58). This item is only about *when* the remaining
-operators ship.
+Names for atop, beside, behind, over, and the 3-train are already closed
+(decisions 13 and 58: `⋔`). At’s glyph is `⊡` (decision 23). This item
+is only about *when* the remaining operators ship.
 
-**Working default.** Composition glyphs and `fork` are Phase 5, not this
-item. Longer forks are item 62. Expand (array `⍀`) is Phase 6. Key,
-Stencil, Rank-as-array, Power, and At are Phase 8 — do not start that
-phase until this item closes or an explicit pull-forward names which of
-them ship.
+**Working default.** Composition glyphs and `⋔` are Phase 5, not this
+item. Longer trains are item 62. Expand (array `⍀`) is Phase 6. Key,
+Stencil, Rank-as-array, Power, and At `⊡` are Phase 8 — do not start
+that phase until this item closes or an explicit pull-forward names
+which of them ship.
 
 **Impact.** Roadmap in [architecture.md](architecture.md).
 
@@ -441,42 +441,22 @@ else `1`. Not `numel`.
 
 ---
 
-## 61. Writable name for outer product
-
-**Question.** Decision 59 names outer product `∘.`. Hy 1.2 cannot parse
-that as an identifier (`∘` then `.` is attribute syntax). What do we
-`defmacro`?
-
-**Options.**
-
-- A. Writable name `outer`. Catalog keeps `∘.` as the Dyalog/decision
-  name; the Hy head is `outer`.
-- B. Invent another glyph that Hy can parse.
-- C. Overload jot `∘` for outer (rejected by decision 59).
-
-**Working default.** A. `(outer g X Y)`. Not an English alias in the
-decision-39 sense: it is the only Hy-legal spelling of G065.
-
-**Impact.** `haply.macros`, G065, user manual.
-
----
-
 ## 62. Longer forks
 
-**Question.** Phase 5 ships the 3-train only: `(fork f g h Y)` and
-`(fork f g h X Y)`. Dyalog also has longer odd-length trains
+**Question.** Phase 5 ships the 3-train only: `(⋔ f g h Y)` and
+`(⋔ f g h X Y)`. Dyalog also has longer odd-length trains
 (`(a b c d e)` is `a b (c d e)`). Does Haply ever accept
-`(fork a b c d e …)`?
+`(⋔ a b c d e …)`?
 
 This is not item 48. Rank, Power, Key, Stencil, and At stay there.
-Decision 13 already forbids a second named train; even length would be
-atop (`⍤`), not a 2-train `fork`.
+Decision 13 already forbids a second train form; even length would be
+atop (`⍤`), not a 2-train `⋔`.
 
 **Options.**
 
 - A. Never. The 3-train is the whole product.
-- B. Odd length, nested like Dyalog: `(fork a b c d e Y)` is
-  `(fork a b (fork c d e) Y)`.
+- B. Odd length, nested like Dyalog: `(⋔ a b c d e Y)` is
+  `(⋔ a b (⋔ c d e) Y)`.
 - C. Later, but not in v1. Keep the Phase 5 `TypeError` until a
   decision pulls B forward.
 
@@ -568,7 +548,7 @@ if we want one rule for the four glyphs.
 ## 67. Operator arity errors: expand-time vs runtime
 
 **Question.** `⌿` `⍀` `⍨` raise `TypeError` while the macro expands.
-`∘` `⍤` `⍥` `⍛` `fork` emit `(raise …)` so `pytest.raises` can catch
+`∘` `⍤` `⍥` `⍛` `⋔` emit `(raise …)` so `pytest.raises` can catch
 them. Same class of mistake, two moments.
 
 **Options.**

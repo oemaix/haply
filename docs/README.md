@@ -17,7 +17,7 @@ To *use* Haply, start at [`manual/`](../manual/README.md).
 | [design-principles.md](design-principles.md) | Binding design rules |
 | [semantics.md](semantics.md) | Dyalog as reference; Haply intent; documented deviations |
 | [glyphs.md](glyphs.md) | Every Dyalog primitive and what Haply will implement |
-| [operators.md](operators.md) | Operators, trains, and named combinators |
+| [operators.md](operators.md) | Operators, trains, and combinators |
 | [architecture.md](architecture.md) | Package layout, dispatch, macros, and implementation phases |
 | [development.md](development.md) | Nix environment, tests, and how to add a glyph |
 | [glossary.md](glossary.md) | Terms used in this suite |
