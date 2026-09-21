@@ -39,5 +39,5 @@ They are not decisions.
 
 ## Status
 
-Phases 0–6 are implemented for PyTorch. Continue with Phase 7 (NumPy)
+Phases 0–7 are implemented. Continue with Phase 8 (item 48 operators)
 in [architecture.md](architecture.md).

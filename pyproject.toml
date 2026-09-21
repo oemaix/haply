@@ -4,16 +4,17 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "haply"
-version = "0.1.0"
-description = "Hy library of Dyalog-inspired APL glyphs for PyTorch tensors"
+version = "0.2.0-dev0"
+description = "Hy library of Dyalog-inspired APL glyphs for PyTorch and NumPy tensors"
 readme = "README.md"
 license = "Apache-2.0"
 license-files = ["LICENSE"]
 requires-python = ">=3.13"
 authors = [{ name = "Haply contributors" }]
 dependencies = [
-    "hy==1.2.0",
+    "hy>=1.2.0",
     "torch",
+    "numpy",
 ]
 
 [project.urls]

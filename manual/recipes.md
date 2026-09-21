@@ -104,3 +104,18 @@ Dyalog sketches `+⌿ A × B` and `A +.× B`:
 (⍀ (torch.tensor [1 0 1]) (torch.tensor [7 8]))
 ; [7 0 8]
 ```
+
+## Same glyphs on NumPy
+
+```hy
+(import numpy :as np)
+(import haply [⍴ × ⍳])
+(import haply.scalar :as sc)
+
+(setv a (np.array [1 2 3]))
+(sc.+ a a)             ; ndarray [2 4 6]
+(⍴ a)                  ; ndarray [3]
+(⍳ 5 :backend 'numpy)  ; ndarray [0 1 2 3 4]
+```
+
+A torch value next to a NumPy value is a `TypeError`.

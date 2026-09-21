@@ -13,7 +13,7 @@ docs it points to. Do not invent glyphs, trains, or APIs that
 | Ask a design question | an issue with the spec template, then a number in [`docs/undecided.md`](docs/undecided.md) |
 
 Dyalog is the semantic reference, not the product. Haply intent on
-`torch.Tensor` wins. Documented deviations stay.
+`torch.Tensor` and `numpy.ndarray` wins. Documented deviations stay.
 
 ## Environment
 
@@ -49,8 +49,8 @@ Closing a design question means **moving** the whole entry from
 
 ## Out of scope until decided
 
-Python-first API (item 22), NumPy as a shipping backend (Phase 7 /
-item 21), and item 48 operators (`⍣` `⌸` `⌺`, rank-`⍤`, At `⊡`).
+Python-first API (item 22), Python natives as a third backend
+(item 21), and item 48 operators (`⍣` `⌸` `⌺`, rank-`⍤`, At `⊡`).
 
 ## License
 

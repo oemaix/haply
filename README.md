@@ -21,9 +21,9 @@ which is a joke for a deterministic numeric library.
 
 ## Status
 
-Phases 0–6 are implemented for `torch.Tensor` (item 21: NumPy is
-Phase 7). Next is Phase 7 — NumPy backend — in
-[docs/architecture.md](docs/architecture.md).
+Phases 0–7 are implemented for `torch.Tensor` and `numpy.ndarray`
+(item 21: Python natives still wait). Next is Phase 8 — item 48
+operators — in [docs/architecture.md](docs/architecture.md).
 
 The user manual lives in [`manual/`](manual/README.md). The official
 specification lives in [`docs/`](docs/README.md).
@@ -84,7 +84,7 @@ There is no PyPI release yet.
 nix develop
 ```
 
-Phases 0–6 are in. Next is Phase 7 (NumPy), in
+Phases 0–7 are in. Next is Phase 8 (item 48 operators), in
 [docs/glyphs.md](docs/glyphs.md#12-implementation-checklist-what-we-will-build).
 
 ## License

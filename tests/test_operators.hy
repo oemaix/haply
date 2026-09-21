@@ -55,6 +55,17 @@
 (defn test-nwise-plus []
   (assert (torch.equal (⌿ 2 + (T 1 2 3 4)) (T 3 5 7))))
 
+(defn test-nwise-longer-than-axis []
+  (setv y (T 1 2 3)
+        r (⌿ 5 + y))
+  (assert (= (list r.shape) [0]))
+  (assert (= r.dtype y.dtype)))
+
+(defn test-reduce-scan-0d []
+  (setv s (torch.tensor 3))
+  (assert (torch.equal (⌿ + s) s))
+  (assert (torch.equal (⍀ + s) s)))
+
 (defn test-reduce-empty-plus []
   (assert (torch.equal (⌿ + (torch.tensor [] :dtype torch.float32))
                        (torch.tensor 0.0))))

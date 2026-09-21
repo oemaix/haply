@@ -152,9 +152,9 @@ and `flake.lock`. Details are in [development.md](development.md).
 
 ## 11. Implementation order
 
-PyTorch is the first implementation target. NumPy is Phase 7, after the
-PyTorch glyph set is stable. Python natives (scalars, then lists) come
-last, and only where they stay honest under decision 9.
+PyTorch was the first implementation target. NumPy is the Phase 7
+backend. Python natives (scalars, then lists) come last, and only
+where they stay honest under decision 9.
 
-Phases 1–6 may ship PyTorch tensors only. Item 21 stays open for whether
-every glyph must eventually accept all three backends.
+Phases 0–7 ship PyTorch and NumPy. Item 21 stays open for whether every
+glyph must eventually accept all three backends.

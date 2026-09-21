@@ -84,13 +84,14 @@ Never export: `*` `/` `=` `|` `.` `,` `~` `^` `¯` `@`.
 ```
 
 `is-torch` / `is-numpy` must not import a missing optional dependency at
-runtime if we later allow NumPy-only or PyTorch-only installs. Phase 0
-working default: both are required in the Nix shell.
+runtime if we later allow NumPy-only or PyTorch-only installs. Phase 7
+ships both and imports `numpy` at load (item 21 notes). `is-numpy` is
+`isinstance` of `ndarray`; NumPy scalars are not arrays (item 36).
 
 ### Routing a dyadic function
 
-Phase 1 implements the PyTorch branch only (item 21). The later steps are
-the intended shape of dispatch, not Phase 1 work.
+Phase 7 implements the PyTorch and NumPy branches (item 21). Python
+natives still wait.
 
 1. Count arguments → monadic or dyadic (or variadic, decision 37).
 2. Read backends of the arguments.
@@ -103,8 +104,8 @@ the intended shape of dispatch, not Phase 1 work.
 ### Constructors
 
 `(⍳ n)` and friends have no tensor argument. Decision 30 default: produce
-a CPU `torch.Tensor`. Provide `(⍳ n :backend 'numpy)` only when Phase 7
-needs it; do not add kwargs casually.
+a CPU `torch.Tensor`. Phase 7 adds `(⍳ n :backend 'numpy)`. Do not add
+further kwargs casually.
 
 ## Dispatch helper
 
@@ -132,9 +133,9 @@ Keep the helper boring. The interesting work is the per-glyph intent in
 Example target expansion:
 
 ```hy
-(⌿ + Y)      ⇒  (torch.sum Y :dim 0)     ; if Y is a tensor path
-(⌿_ + Y)     ⇒  (torch.sum Y :dim -1)
-(· + × X Y)  ⇒  (torch.matmul X Y)
+(⌿ + Y)      ⇒  (reduce-known 0 "sum" Y)   ; torch.sum or np.sum
+(⌿_ + Y)     ⇒  (reduce-known -1 "sum" Y)
+(· + × X Y)  ⇒  (matmul-known X Y)
 ```
 
 If the operand is not a recognised symbol, expand to a cell loop helper
@@ -231,7 +232,7 @@ Item 21 working default C: repeat the **already shipped** glyphs on
 out. This phase does not close item 21.
 
 Done when `(+ a a)` and `(⍴ a)` on a NumPy array return a NumPy array,
-and a torch/NumPy mix raises `TypeError`.
+and a torch/NumPy mix raises `TypeError`. **Met.**
 
 ### Phase 8 — item 48 operators
 

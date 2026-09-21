@@ -24,9 +24,9 @@ PyTorch tensors?
 **Context.** Decision 9 says “preserve the backend you are given”. The
 compatibility note still asks whether all three are in scope.
 
-Left open on 2026-09-20. Phases 1–6 implement **PyTorch tensors only**.
-Phase 7 is the NumPy shipping slot (working default C). Whether every
-glyph must later accept all three remains the question.
+Left open on 2026-09-20. Phases 1–6 implemented **PyTorch tensors only**.
+Phase 7 shipped NumPy (working default C). Whether every glyph must later
+accept all three remains the question. Python natives still wait.
 
 **Options.**
 
@@ -45,6 +45,10 @@ Implementing a glyph on lists means reject, walk in Python (slow, and it
 starts to look like nested APL), or lift to a tensor (against decision 9
 unless the lift is documented). A Python number next to a tensor is
 usually free: the backend already broadcasts it.
+
+Phase 7 imports `numpy` at package load (`pyproject` requires it). A
+torch-only install of `haply` therefore fails on import. Lazy detection
+can return if this item later drops NumPy as a required backend.
 
 **Impact.** Dispatch tables, tests, and mixed-type errors.
 
@@ -201,6 +205,7 @@ PyTorch has two tensor shapes that people casually call scalar.
 | Form | `type` | `shape` / `size` | `(⍴ ·)` under typical tensor intent | `(≢ ·)` tally |
 | --- | --- | --- | --- | --- |
 | Python `3` | `int` | none | not a tensor; error, or no shape | not specified |
+| `np.int64(3)` | NumPy scalar | `()` on the scalar, not an `ndarray` | not an array | not specified |
 | `torch.tensor(3)` | 0-d tensor | `()` | empty 1-d shape vector | `1` |
 | `torch.tensor([3])` | vector | `(1,)` | `[1]` | `1` |
 
@@ -216,6 +221,8 @@ Indexing: `s` cannot be indexed; `v[0]` is 0-d.
 - C. Follow the backend’s own treatment and document it per function.
 
 **Working default.** A, plus C when both arguments are already tensors.
+NumPy scalars (`np.int64`, `np.float64`, …) are not arrays and not
+Python numbers: they raise `TypeError` until this item says otherwise.
 
 **Impact.** Shape of results, `⍴`, `≢`, reductions.
 
@@ -409,6 +416,10 @@ change it before Phase 0?
 **Working default.** Accept it until this item is closed with a different
 tree.
 
+**Notes.** Phase 7 added `tests/test_numpy.hy`. The file is real; the
+proposed tree in [architecture.md](architecture.md) was not updated
+because this item is still open.
+
 **Impact.** Imports, macros, tests.
 
 ---
@@ -425,6 +436,11 @@ almost always 0 or 1.
 - C. Monadic `≡` returns tensor rank.
 
 **Working default.** A for monadic; implement dyadic match.
+
+**Notes.** `torch.equal` and `np.array_equal` both compare values, not
+dtype (`int` 1 matches `float` 1.0; `True` matches `1`). Both treat
+NaN as not equal. A stricter “same dtype” match would be a new option
+on this item; the working default stays the backend equal.
 
 **Impact.** Compare catalog.
 
@@ -482,7 +498,11 @@ explicit pull-forward names one.
 - C. Keep the current split: only `?` `⌹` `⊤` `⊥` lift.
 
 **Working default.** A. `?` stays a constructor (item 30). `⌹` `⊤` `⊥`
-should move to `require-torch` when this item closes.
+should move to `require-array` when this item closes.
+
+**Notes.** NumPy has no `lgamma`. Monadic and dyadic `!` run the torch
+kernel and wrap the result as `ndarray`. That is a lift of the *kernel*,
+not of the user’s value type. A native NumPy path can wait.
 
 **Impact.** `haply/numeric.hy`, item 21, tests for `?`.
 
@@ -561,3 +581,43 @@ them. Same class of mistake, two moments.
 heads are touched.
 
 **Impact.** `haply/macros.hy`, `haply/trains.hy`, operator tests.
+
+---
+
+## 68. Device of derived index and shape vectors
+
+**Question.** Decision 49 says do not move devices. Item 30 says
+constructors with no tensor argument are CPU torch. `(⍴ Y)` has a
+tensor argument. Before Phase 7 the shape vector was always CPU; now
+`int64-vector` follows `Y.device`. Grade, where, and other index
+results already followed `Y`.
+
+**Options.**
+
+- A. Same device as `Y` (decision 49; current).
+- B. Always CPU, even when `Y` is CUDA (old monadic `⍴`).
+- C. CPU only for constructors (`⍳`, `?`); derived vectors follow `Y`.
+
+**Working default.** A.
+
+**Impact.** G026, `int64-vector`, grade, where, any later index result.
+
+---
+
+## 69. n-wise window longer than the axis
+
+**Question.** `(⌿ n + Y)` when `n` is larger than the reduced axis.
+The unknown-operand helper already returned an empty array (axis
+length 0, other shape kept). The old known-operand torch path used
+`.unfold` and raised `RuntimeError`. Phase 7 uses one helper for both.
+
+**Options.**
+
+- A. Empty result, same dtype, axis length 0 (current).
+- B. Backend error (`RuntimeError` / `ValueError`).
+- C. Dyalog n-wise (identity or empty depending on `n` vs length).
+
+**Working default.** A. Item 41 still covers empty *reduce* identities;
+this is the window that never starts.
+
+**Impact.** `nwise-known`, `nwise-reduce`, operator tests.

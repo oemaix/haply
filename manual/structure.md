@@ -1,7 +1,8 @@
 # Structure
 
-Shape and layout on `torch.Tensor`. Rank is `tensor.ndim`. Axis `0` is
-the first (major) axis; `-1` is the last.
+Shape and layout on `torch.Tensor` or `numpy.ndarray`. Rank is
+`.ndim`. Axis `0` is the first (major) axis; `-1` is the last. The
+result stays on the same backend as `Y`.
 
 ```hy
 (import haply [⍴ ++ ⍪ ⌽ ⊖ ⍉ ↑ ↓ ⊢ ⊣ ≠ ≡ ≢])
@@ -11,7 +12,7 @@ the first (major) axis; `-1` is the last.
 
 | Glyph | Monad | Dyad |
 | --- | --- | --- |
-| `⍴` | shape as a 1-d `int64` tensor (empty for a 0-d scalar) | reshape `Y` to `X`; **element count must match** |
+| `⍴` | shape as a 1-d `int64` vector of the same backend (empty for a 0-d scalar) | reshape `Y` to `X`; **element count must match** |
 | `++` | ravel, C-order flatten | catenate on the last axis |
 | `⍪` | table: matrix with axis 0 preserved | catenate on axis 0 |
 
@@ -19,7 +20,8 @@ the first (major) axis; `-1` is the last.
 integer tensor.
 
 **Deviation:** Dyalog reshape recycles `Y` to fill `X`. Haply does not.
-A size mismatch raises a backend `RuntimeError`.
+A size mismatch raises a backend error (`RuntimeError` on torch,
+`ValueError` on NumPy).
 
 ```hy
 (setv A (torch.tensor [[1 2 3] [4 5 6]]))
@@ -99,6 +101,7 @@ major-cell unique mask.
 ```hy
 (≢ (torch.tensor [[1 2 3] [4 5 6]]))     ; 2  — not 6
 (≡ (torch.tensor [1 2]) (torch.tensor [1 2]))   ; True
+; NaN does not match NaN
 (≠ (torch.tensor [22 10 22 21 10]))
 ; [True True False True False]
 (≠ (torch.tensor [[1 2] [1 3]]))

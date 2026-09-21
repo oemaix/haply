@@ -11,11 +11,11 @@ Prose here is English.
 
 ## Status
 
-Phases 0–6 are available on `torch.Tensor`. NumPy and a Python-first
-import surface are not shipped. Operators are macros:
+Phases 0–7 are available on `torch.Tensor` and `numpy.ndarray`. A
+Python-first import surface is not shipped. Operators are macros:
 `(require haply.macros [⌿ · ∘· ∘ …])`. The 3-train is
-`(require haply.trains [⋔])`. NumPy is Phase 7. Power, key, stencil,
-rank, and At `⊡` are Phase 8.
+`(require haply.trains [⋔])`. Power, key, stencil, rank, and At `⊡`
+are Phase 8.
 
 ## What Haply is
 
@@ -55,8 +55,8 @@ Pin a Git tag when you need a frozen tree:
 uv add "haply @ git+https://github.com/oemaix/haply.git@v0.1.0"
 ```
 
-The other project must provide Hy 1.2.0 and a `torch` that Haply can
-import. Nix remains the version pin for developing Haply itself.
+The other project must provide Hy 1.2.0, `torch`, and `numpy`.
+Nix remains the version pin for developing Haply itself.
 
 ## Import
 
@@ -95,9 +95,10 @@ ordinary calls after `import`.
 
 No APL infix. No axis bracket. Wrong arity raises `TypeError`.
 
-Index origin is 0. Comparisons are exact. Results stay
-`torch.Tensor` except where a page says otherwise (`≢` tally is a
-Python `int`; `≡` match is a Python `bool`).
+Index origin is 0. Comparisons are exact. Results stay on the
+argument’s backend (`torch.Tensor` or `numpy.ndarray`) except where a
+page says otherwise (`≢` tally is a Python `int`; `≡` match is a
+Python `bool`). A torch/NumPy mix is a `TypeError`.
 
 ## Renamed glyphs
 
@@ -129,7 +130,6 @@ These Dyalog characters are **not** Haply names.
 
 ## Not in this manual yet
 
-- NumPy backend — Phase 7
 - Power, key, stencil, rank, At `⊡` — Phase 8
 - English aliases (glyphs are the names)
 - Runtime `__doc__` on every export

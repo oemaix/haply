@@ -8,8 +8,9 @@ not this file.
 
 - Install: no PyPI. Path or git dependency. Nix shell to develop Haply.
 - Host: Hy 1.2.0, prefix S-expressions, Lisp evaluation.
-- Values: `torch.Tensor` (only backend shipped). No Haply array class.
-- Broadcast: PyTorch. Not APL conformability.
+- Values: `torch.Tensor` or `numpy.ndarray`. No Haply array class.
+- Broadcast: the argument’s backend. Not APL conformability.
+- Mixed torch/NumPy: `TypeError`. Python natives wait.
 - Index origin: 0. Compare: exact. No prototypes.
 - Public import: `(import haply [⍴ × ⌽ ⍳ …])` — selective, never `*`.
 - Operators: `(require haply.macros [⌿ ⌿_ ⍀ ⍀_ ⍨ · ∘· ¨ ∘ ⍤ ⍥ ⍛])`.
@@ -63,17 +64,18 @@ atop only; an integer right operand is a `TypeError`.
 - Do document reshape as “size must match”. Do not recycle like Dyalog.
 - Do treat `↑` `↓` as dyadic only; pad is zero. Do not call them monadically.
 - Do treat `≡` as dyadic match (Python `bool`). Do not ask for depth.
+  NaN does not match NaN.
 - Do treat `≢` monad as `shape[0]` (Python `int`), not `numel`.
 - Do treat monadic `≠` as a same-shape ravel unique-mask.
 - Do use `||` as magnitude / residue of `Y` by `X`.
 - Do treat `⍳` not-found as `n`. Do treat `⍋` as numeric only.
 - Do treat `(⌹ X Y)` as solve `Y B = X`. Do treat `?` bounds as `[0, n)`.
-- Do `require` operators and `⋔`; kernel expansions need `torch` in the file.
+- Do `require` operators and `⋔`. Known operands pick a torch or NumPy kernel at runtime.
 - Do treat `(⍀ mask Y)` as expand (0/1 or boolean; fill is zero).
 - Do treat `(⌿ mask Y)` replicate as rank ≥ 1 and boolean/integer mask.
 - Do treat `⊃` of an empty first axis as `ValueError`.
 - Do treat Haply `⍛` as `(f (g Y))` / `((g X) f Y)`, not Dyalog behind.
-- Do not import NumPy through Haply.
+- Do pass `numpy.ndarray` the same way as `torch.Tensor`. Do not mix the two.
 
 Pages: [README](README.md), [scalars](scalars.md),
 [structure](structure.md), [search](search.md),

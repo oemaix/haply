@@ -1,6 +1,6 @@
 ;; Operator macros. Require this module; do not import it.
-;; Known operands expand to torch kernels. Anything else calls a helper
-;; in haply._dispatch (import injected so the caller need not bind haply).
+;; Known operands expand to a helper in haply._dispatch that picks the
+;; torch or NumPy kernel at runtime. Anything else uses the cell loop.
 (import hy.models [Symbol Integer Expression])
 
 (eval-and-compile
@@ -29,31 +29,6 @@
        (import haply._dispatch [~fn-sym])
        (~fn-sym ~@args)))
 
-  (defn _reduce-kernel [axis op y]
-    (setv name (get _REDUCE (_sym-str op)))
-    (cond
-      (= name "sum") `(torch.sum ~y :dim ~axis)
-      (= name "prod") `(torch.prod ~y :dim ~axis)
-      (= name "amax") `(torch.amax ~y :dim ~axis)
-      True `(torch.amin ~y :dim ~axis)))
-
-  (defn _scan-kernel [axis op y]
-    (setv name (get _SCAN (_sym-str op)))
-    (cond
-      (= name "cumsum") `(torch.cumsum ~y :dim ~axis)
-      (= name "cumprod") `(torch.cumprod ~y :dim ~axis)
-      (= name "cummax") `(.values (torch.cummax ~y ~axis))
-      True `(.values (torch.cummin ~y ~axis))))
-
-  (defn _nwise-kernel [axis k op y]
-    (setv kn (get _REDUCE (_sym-str op))
-          w `(.unfold ~y ~axis ~k 1))
-    (cond
-      (= kn "sum") `(torch.sum ~w :dim -1)
-      (= kn "prod") `(torch.prod ~w :dim -1)
-      (= kn "amax") `(torch.amax ~w :dim -1)
-      True `(torch.amin ~w :dim -1)))
-
   (defn _slash [axis forms]
     (setv n (len forms))
     (when (< n 2)
@@ -61,23 +36,26 @@
     (setv k (_int-lit (get forms 0)))
     (when (and (is-not k None) (>= n 3))
       (setv op (get forms 1)
-            y (get forms 2))
-      (return (if (in (_sym-str op) _REDUCE)
-                (_nwise-kernel axis k op y)
+            y (get forms 2)
+            kn (.get _REDUCE (_sym-str op)))
+      (return (if kn
+                (_dispatch-call 'nwise-known axis k kn y)
                 (_dispatch-call 'nwise-reduce axis k op y))))
     (setv op (get forms 0)
-          y (get forms 1))
-    (if (in (_sym-str op) _REDUCE)
-      (_reduce-kernel axis op y)
+          y (get forms 1)
+          kn (.get _REDUCE (_sym-str op)))
+    (if kn
+      (_dispatch-call 'reduce-known axis kn y)
       (_dispatch-call 'reduce-or-replicate axis op y)))
 
   (defn _backslash [axis forms]
     (when (!= (len forms) 2)
       (raise (TypeError "⍀ needs an operand and an argument")))
     (setv op (get forms 0)
-          y (get forms 1))
-    (if (in (_sym-str op) _SCAN)
-      (_scan-kernel axis op y)
+          y (get forms 1)
+          kn (.get _SCAN (_sym-str op)))
+    (if kn
+      (_dispatch-call 'scan-known axis kn y)
       (_dispatch-call 'scan-or-expand axis op y))))
 
 (defmacro ⌿ [#* forms]
@@ -107,17 +85,16 @@
 
 (defmacro · [f g x y]
   (if (and (= (_sym-str f) "+") (= (_sym-str g) "×"))
-    `(torch.matmul ~x ~y)
+    (_dispatch-call 'matmul-known x y)
     (_dispatch-call 'inner-product f g x y)))
 
 ;; Hy cannot parse Dyalog ∘. (ASCII dot). Writable name: ∘· (decision 61).
 (defmacro ∘· [g x y]
-  (setv s (_sym-str g)
-        left (_dispatch-call 'outer-left x y))
+  (setv s (_sym-str g))
   (cond
-    (= s "×") `(torch.mul ~left ~y)
-    (= s "+") `(torch.add ~left ~y)
-    True `(~g ~left ~y)))
+    (= s "×") (_dispatch-call 'outer-mul x y)
+    (= s "+") (_dispatch-call 'outer-add x y)
+    True `(~g ~(_dispatch-call 'outer-left x y) ~y)))
 
 (defmacro ¨ [f #* args]
   (if (in (_sym-str f) _SCALAR)

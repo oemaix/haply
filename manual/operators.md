@@ -10,8 +10,8 @@ Operators are **macros**. Require them; do not `import` them.
 ```
 
 Known operands (`+` `×` `⌈` `⌊` for reduce/scan; `+ ×` for inner
-product) expand to `torch` kernels. Other operands run a cell loop.
-Kernel expansions use the name `torch`, so import it in the same file.
+product) expand to a helper that picks the torch or NumPy kernel at
+runtime. Other operands run a cell loop.
 
 ## Axis
 
@@ -37,11 +37,12 @@ are a `ValueError`.
 (⌿ 2 + (torch.tensor [1 2 3 4])) ; n-wise windows of 2 → [3 5 7]
 ```
 
-Empty reduce of `+` / `×` follows the `torch` identity (0 / 1). Empty
-reduce of an unknown function is a `ValueError`. n-wise `n` must be
-positive.
+Empty reduce of `+` / `×` follows the backend identity (0 / 1). Empty
+reduce of an unknown function is a `ValueError`. A 0-d `Y` is returned
+unchanged. n-wise `n` must be positive; if `n` is larger than the axis,
+the result is empty (axis length 0).
 
-`(⌿ + (× A B))` is `torch.sum` of the product on axis 0.
+`(⌿ + (× A B))` is `sum` of the product on axis 0.
 
 ## Scan — `⍀` / `⍀_`
 

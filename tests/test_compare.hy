@@ -40,7 +40,10 @@
 
 (defn test-match-false []
   (assert (not (≡ (T 1 2) (T 1 3))))
-  (assert (not (≡ (T 1 2) (T 1 2 3)))))
+  (assert (not (≡ (T 1 2) (T 1 2 3))))
+  (setv nan (float "nan"))
+  (assert (not (≡ (torch.tensor [nan]) (torch.tensor [nan]))))
+  (assert (≡ (T 1 2) (torch.tensor [1.0 2.0]))))
 
 (defn test-match-monad-dropped []
   (with [(pytest.raises TypeError)]

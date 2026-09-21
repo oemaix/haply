@@ -1,7 +1,7 @@
 # Search and grade
 
-Index origin is 0. Results stay `torch.Tensor` except where a row says
-otherwise.
+Index origin is 0. Results stay on the argument’s backend except where
+a row says otherwise.
 
 ```hy
 (import haply [⍳ ⍸ ∊ ⌷ ⊃ ∪ ∩ ⍋ ⍒ ≁ ⍷])
@@ -12,13 +12,15 @@ otherwise.
 | Glyph | Monad | Dyad |
 | --- | --- | --- |
 | `⍳` | index generator: `arange` for a length, stacked `meshgrid` for a shape | first index of each `Y` in a **1-d** `X`; not-found is `n` (length of `X`) |
-| `⍸` | indices of truthy values (`nonzero`); 1-d flattens to a vector | interval index: `torch.bucketize` of `Y` into sorted breakpoints `X` (left) |
+| `⍸` | indices of truthy values (`nonzero`); 1-d flattens to a vector | interval index: bucketize / `searchsorted` of `Y` into sorted breakpoints `X` (left) |
 
-Monadic `⍳` is a CPU `int64` tensor. `X` may be a Python `int`, a
-list/tuple of ints, or a 0-d/1-d integer tensor.
+Monadic `⍳` is a CPU `int64` torch vector by default. Pass
+`:backend 'numpy` for a NumPy result. `X` may be a Python `int`, a
+list/tuple of ints, or a 0-d/1-d integer array.
 
 ```hy
-(⍳ 5)                    ; [0 1 2 3 4]
+(⍳ 5)                    ; torch [0 1 2 3 4]
+(⍳ 5 :backend 'numpy)    ; ndarray [0 1 2 3 4]
 (⍳ [2 3])                ; shape [2 3 2]; last axis is the index pair
 (⍳ (torch.tensor [10 20 30]) (torch.tensor [20 40 10]))
 ; [1 3 0]

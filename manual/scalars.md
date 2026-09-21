@@ -1,7 +1,8 @@
 # Scalars
 
-Elementwise on `torch.Tensor`. Dyadic shapes follow PyTorch broadcast.
-A Python number on one side is accepted and promoted.
+Elementwise on `torch.Tensor` or `numpy.ndarray`. Dyadic shapes follow
+the argument’s backend broadcast. A Python number on one side is
+accepted and promoted. Mixing torch and NumPy is a `TypeError`.
 
 Import the glyph, except `+` `-` `<` `>` `**` — those need the function
 object (`haply.scalar` as `sc`). See [README](README.md#import).
@@ -37,7 +38,7 @@ object (`haply.scalar` as `sc`). See [README](README.md#import).
 conjugates.
 
 Residue follows Dyalog `X|Y`: `||` of `X=3` and `Y=-5` is `1`. The
-sign matches `torch.remainder`.
+sign matches `torch.remainder` / `numpy.remainder`.
 
 ## Compare
 
@@ -86,6 +87,9 @@ Floats and mixed bool/int raise `ValueError` on `∧` `∨`.
 | --- | --- | --- |
 | `○` | `π * Y` | circular table on a **single** integer code `X` |
 | `!` | `Γ(Y+1)` (factorial on integers) | binomial `C(Y, X)` |
+
+NumPy has no `lgamma`. `!` on an `ndarray` runs the torch kernel and
+wraps the result so the backend stays NumPy.
 
 Shipped circular codes: `1` sin, `2` cos, `3` tan, `-1` asin, `-2`
 acos, `-3` atan, `5` sinh, `6` cosh, `7` tanh. Other Dyalog codes

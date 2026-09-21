@@ -317,6 +317,7 @@ Build these names. This is the concrete v1-or-specified set.
 ### Phase 7 — NumPy backend
 
 No new glyphs. Repeat shipped names on `numpy.ndarray` (item 21).
+**Met.**
 
 ### Phase 8 — item 48 operators
 

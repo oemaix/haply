@@ -6,7 +6,9 @@
 
 ## Roll and deal — `?`
 
-Host RNG is `torch` (`torch.manual_seed` for repeats). Index origin 0.
+Host RNG follows the array backend: `torch.manual_seed` for torch,
+`numpy.random.seed` for NumPy. Python scalars still construct a torch
+result. Index origin 0.
 
 | Glyph | Monad | Dyad |
 | --- | --- | --- |
